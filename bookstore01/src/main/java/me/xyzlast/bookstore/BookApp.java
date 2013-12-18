@@ -25,6 +25,18 @@ public class BookApp {
         }
     }
 
+    private Book convertBook(ResultSet rs) throws SQLException {
+        Book book = new Book();
+        book.setId(rs.getInt("id"));
+        book.setName(rs.getString("name"));
+        book.setAuthor(rs.getString("author"));
+        java.util.Date date = new java.util.Date(rs.getDate("publishDate").getTime());
+        book.setPublishDate(date);
+        book.setComment(rs.getString("comment"));
+
+        return book;
+    }
+
     public void add(Book book) throws Exception {
         Connection conn = getConnection();
 
@@ -47,17 +59,8 @@ public class BookApp {
         st.setInt(1, id);
         ResultSet rs = st.executeQuery();
         rs.next();
-
-        Book book = new Book();
-        book.setId(rs.getInt("id"));
-        book.setName(rs.getString("name"));
-        book.setAuthor(rs.getString("author"));
-        java.util.Date date = new java.util.Date(rs.getDate("publishDate").getTime());
-        book.setPublishDate(date);
-        book.setComment(rs.getString("comment"));
-
+        Book book = convertBook(rs);
         closeObject(rs, st, conn);
-
         return book;
     }
 
@@ -70,13 +73,7 @@ public class BookApp {
 
         List<Book> books = new ArrayList<>();
         while(rs.next()) {
-            Book book = new Book();
-            book.setId(rs.getInt("id"));
-            book.setName(rs.getString("name"));
-            book.setAuthor(rs.getString("author"));
-            java.util.Date date = new java.util.Date(rs.getDate("publishDate").getTime());
-            book.setPublishDate(date);
-            book.setComment(rs.getString("comment"));
+            Book book = convertBook(rs);
             books.add(book);
         }
 
@@ -123,13 +120,7 @@ public class BookApp {
 
         List<Book> books = new ArrayList<>();
         while(rs.next()) {
-            Book book = new Book();
-            book.setId(rs.getInt("id"));
-            book.setName(rs.getString("name"));
-            book.setAuthor(rs.getString("author"));
-            java.util.Date date = new java.util.Date(rs.getDate("publishDate").getTime());
-            book.setPublishDate(date);
-            book.setComment(rs.getString("comment"));
+            Book book = convertBook(rs);
             books.add(book);
         }
         closeObject(rs, ps, conn);
