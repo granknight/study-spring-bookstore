@@ -11,6 +11,15 @@ import java.util.List;
  */
 public class BookApp {
 
+    interface ExecuteUpdateQuery {
+        PreparedStatement getPreparedStatement(Connection conn) throws SQLException;
+    }
+
+    interface ExecuteSelectQuery {
+        PreparedStatement getPreparedStatement(Connection conn) throws SQLException;
+        Object parseResultSet(ResultSet rs) throws SQLException;
+    }
+
     private Connection getConnection() throws InstantiationException,
             IllegalAccessException, ClassNotFoundException, SQLException {
         String url = "jdbc:mysql://localhost/bookstore";
@@ -21,7 +30,11 @@ public class BookApp {
 
     private void closeObject(AutoCloseable... closeables) throws Exception {
         for(AutoCloseable c : closeables) {
-            c.close();
+            try {
+                c.close();
+            } catch(Exception ex) {
+
+            }
         }
     }
 
@@ -37,102 +50,137 @@ public class BookApp {
         return book;
     }
 
-    public void add(Book book) throws Exception {
+    private Object execute(ExecuteSelectQuery query) throws Exception {
         Connection conn = getConnection();
-
-        PreparedStatement st = conn.prepareStatement("insert books(name, author, publishDate, comment, id) values(?, ?, ?, ?, ?)");
-        st.setString(1, book.getName());
-        st.setString(2, book.getAuthor());
-        java.sql.Date sqlDate = new java.sql.Date(book.getPublishDate().getTime());
-        st.setDate(3, sqlDate);
-        st.setString(4, book.getComment());
-        st.setInt(5, book.getId());
-        st.execute();
-
-        closeObject(st, conn);
-    }
-
-    public Book get(int id) throws Exception {
-        Connection conn = getConnection();
-
-        PreparedStatement st = conn.prepareStatement("select id, name, author, publishDate, comment from books where id=?");
-        st.setInt(1, id);
-        ResultSet rs = st.executeQuery();
-        rs.next();
-        Book book = convertBook(rs);
-        closeObject(rs, st, conn);
-        return book;
-    }
-
-    public List<Book> search(String name) throws Exception {
-        Connection conn = getConnection();
-
-        PreparedStatement ps = conn.prepareStatement("select id, name, author, publishDate, comment from books where name like ?");
-        ps.setString(1, "%" + name + "%");
+        PreparedStatement ps = query.getPreparedStatement(conn);
         ResultSet rs = ps.executeQuery();
+        Object result = query.parseResultSet(rs);
+        closeObject(conn, ps, rs);
+        return result;
+    }
 
-        List<Book> books = new ArrayList<>();
-        while(rs.next()) {
-            Book book = convertBook(rs);
-            books.add(book);
-        }
+    private void execute(ExecuteUpdateQuery query) throws Exception {
+        Connection conn = getConnection();
+        PreparedStatement ps = query.getPreparedStatement(conn);
+        ps.executeUpdate();
+        closeObject(conn, ps);
+    }
 
-        closeObject(rs, ps, conn);
+    public void add(final Book book) throws Exception {
+        ExecuteUpdateQuery query = new ExecuteUpdateQuery() {
+            @Override
+            public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+                PreparedStatement st = conn.prepareStatement("insert books(name, author, publishDate, comment, id) values(?, ?, ?, ?, ?)");
+                st.setString(1, book.getName());
+                st.setString(2, book.getAuthor());
+                java.sql.Date sqlDate = new java.sql.Date(book.getPublishDate().getTime());
+                st.setDate(3, sqlDate);
+                st.setString(4, book.getComment());
+                st.setInt(5, book.getId());
+                return st;
+            }
+        };
+        execute(query);
+    }
 
-        return books;
+    public Book get(final int id) throws Exception {
+        ExecuteSelectQuery query = new ExecuteSelectQuery() {
+            @Override
+            public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+                PreparedStatement st = conn.prepareStatement("select id, name, author, publishDate, comment from books where id=?");
+                st.setInt(1, id);
+                return st;
+            }
+            @Override
+            public Object parseResultSet(ResultSet rs) throws SQLException {
+                rs.next();
+                return convertBook(rs);
+            }
+        };
+        return (Book) execute(query);
+    }
+
+    public List<Book> search(final String name) throws Exception {
+        ExecuteSelectQuery query = new ExecuteSelectQuery() {
+            @Override
+            public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+                PreparedStatement ps = conn.prepareStatement("select id, name, author, publishDate, comment from books where name like ?");
+                ps.setString(1, "%" + name + "%");
+                return ps;
+            }
+
+            @Override
+            public Object parseResultSet(ResultSet rs) throws SQLException {
+                List<Book> books = new ArrayList<>();
+                while(rs.next()) {
+                    Book book = convertBook(rs);
+                    books.add(book);
+                }
+                return books;
+            }
+        };
+        return (List<Book>) execute(query);
     }
 
     public int countAll() throws Exception {
-        Connection conn = getConnection();
-
-        PreparedStatement ps = conn.prepareStatement("select count(*) from books");
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
-
-        closeObject(rs, ps, conn);
-
-        return count;
+        ExecuteSelectQuery query = new ExecuteSelectQuery() {
+            @Override
+            public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+                return conn.prepareStatement("select count(*) from books");
+            }
+            @Override
+            public Object parseResultSet(ResultSet rs) throws SQLException {
+                rs.next();
+                return rs.getInt(1);
+            }
+        };
+        return (int) execute(query);
     }
 
-    public Book update(Book book) throws Exception {
-        Connection conn = getConnection();
-
-        PreparedStatement ps = conn.prepareStatement("update books set name=?, author=?, publishDate=?, comment=? where id=?");
-        ps.setString(1, book.getName());
-        ps.setString(2, book.getAuthor());
-        ps.setDate(3, new Date(book.getPublishDate().getTime()));
-        ps.setString(4, book.getComment());
-        ps.setInt(5, book.getId());
-
-        ps.executeUpdate();
-
-        closeObject(ps, conn);
-
+    public Book update(final Book book) throws Exception {
+        ExecuteUpdateQuery query = new ExecuteUpdateQuery() {
+            @Override
+            public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+                PreparedStatement ps = conn.prepareStatement("update books set name=?, author=?, publishDate=?, comment=? where id=?");
+                ps.setString(1, book.getName());
+                ps.setString(2, book.getAuthor());
+                ps.setDate(3, new Date(book.getPublishDate().getTime()));
+                ps.setString(4, book.getComment());
+                ps.setInt(5, book.getId());
+                return ps;
+            }
+        };
+        execute(query);
         return book;
     }
 
     public List<Book> getAll() throws Exception {
-        Connection conn = getConnection();
+        ExecuteSelectQuery query = new ExecuteSelectQuery() {
+            @Override
+            public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+                return conn.prepareStatement("select id, name, author, publishDate, comment from books");
+            }
 
-        PreparedStatement ps = conn.prepareStatement("select id, name, author, publishDate, comment from books");
-        ResultSet rs = ps.executeQuery();
-
-        List<Book> books = new ArrayList<>();
-        while(rs.next()) {
-            Book book = convertBook(rs);
-            books.add(book);
-        }
-        closeObject(rs, ps, conn);
-        return books;
+            @Override
+            public Object parseResultSet(ResultSet rs) throws SQLException {
+                List<Book> books = new ArrayList<>();
+                while(rs.next()) {
+                    Book book = convertBook(rs);
+                    books.add(book);
+                }
+                return books;
+            }
+        };
+        return (List<Book>) execute(query);
     }
 
     public void deleteAll() throws Exception {
-        Connection conn = getConnection();
-
-        PreparedStatement ps = conn.prepareStatement("delete from books");
-        ps.executeUpdate();
-
-        closeObject(ps, conn);
+        ExecuteUpdateQuery query = new ExecuteUpdateQuery() {
+            @Override
+            public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+                return conn.prepareStatement("delete from books");
+            }
+        };
+        execute(query);
     }
 }
