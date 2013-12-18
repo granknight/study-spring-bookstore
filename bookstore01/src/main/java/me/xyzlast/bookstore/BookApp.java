@@ -22,6 +22,13 @@ public class BookApp {
     }
 
     private ConnectionFactory connectionFactory;
+    public ConnectionFactory getConnectionFactory() {
+        return connectionFactory;
+    }
+    public void setConnectionFactory(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
 
     private void closeObject(AutoCloseable... closeables) throws Exception {
         for(AutoCloseable c : closeables) {

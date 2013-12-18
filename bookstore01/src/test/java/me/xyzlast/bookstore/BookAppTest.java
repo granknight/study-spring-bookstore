@@ -2,8 +2,12 @@ package me.xyzlast.bookstore;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -15,8 +19,12 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by ykyoon on 12/18/13.
  */
+@SuppressWarnings("unused")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:applicationContext.xml")
 public class BookAppTest {
-
+    @Autowired
+    private ApplicationContext context;
     private BookApp bookApp;
 
     private List<Book> getBooks() {
@@ -56,7 +64,7 @@ public class BookAppTest {
 
     @Before
     public void setUp() throws Exception {
-        bookApp = new BookApp();
+        bookApp = (BookApp) context.getBean("bookApp");
         bookApp.deleteAll();
         assertThat(bookApp.countAll(), is(0));
     }
@@ -126,6 +134,4 @@ public class BookAppTest {
         searchedBooks = bookApp.search("name");
         assertThat(searchedBooks.size(), is(3));
     }
-
-
 }
