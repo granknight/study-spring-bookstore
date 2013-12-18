@@ -45,7 +45,7 @@ public class BookAppTest {
         return books;
     }
 
-    private void compareBook(Book book) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+    private void compareBook(Book book) throws Exception {
         Book dbBook = bookApp.get(book.getId());
         assertThat(dbBook.getName(), is(book.getName()));
         assertThat(dbBook.getAuthor(), is(book.getAuthor()));
@@ -55,14 +55,14 @@ public class BookAppTest {
     }
 
     @Before
-    public void setUp() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+    public void setUp() throws Exception {
         bookApp = new BookApp();
         bookApp.deleteAll();
         assertThat(bookApp.countAll(), is(0));
     }
 
     @Test
-    public void addAndCount() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+    public void addAndCount() throws Exception {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
@@ -73,7 +73,7 @@ public class BookAppTest {
     }
 
     @Test
-    public void update() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+    public void update() throws Exception {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
@@ -91,7 +91,7 @@ public class BookAppTest {
     }
 
     @Test
-    public void getAll() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+    public void getAll() throws Exception {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
@@ -105,7 +105,7 @@ public class BookAppTest {
     }
 
     @Test
-    public void search() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+    public void search() throws Exception {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
