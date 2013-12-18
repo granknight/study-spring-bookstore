@@ -5,7 +5,7 @@ import spock.lang.Specification
 /**
  * Created by ykyoon on 12/18/13.
  */
-class BookAppMainTest extends Specification {
+class BookDaoMainTest extends Specification {
     def "문자열 변경 테스트"() {
         when:
         BookAppMain app = new BookAppMain()

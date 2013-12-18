@@ -1,8 +1,11 @@
-package me.xyzlast.bookstore;
+package me.xyzlast.bookstore.entities;
 
 /**
  * Created by ykyoon on 12/18/13.
  */
+import me.xyzlast.bookstore.constants.BookStatus;
+
+import javax.sound.sampled.EnumControl;
 import java.util.Date;
 
 public class Book {
@@ -16,6 +19,24 @@ public class Book {
     private String author;
     private Date publishDate;
     private String comment;
+    private BookStatus status;
+    private Integer rentUserId;
+
+    public BookStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookStatus status) {
+        this.status = status;
+    }
+
+    public Integer getRentUserId() {
+        return rentUserId;
+    }
+
+    public void setRentUserId(Integer rentUserId) {
+        this.rentUserId = rentUserId;
+    }
 
     public int getId() {
         return id;

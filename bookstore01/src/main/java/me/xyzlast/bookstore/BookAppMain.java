@@ -1,5 +1,8 @@
 package me.xyzlast.bookstore;
 
+import me.xyzlast.bookstore.dao.BookDao;
+import me.xyzlast.bookstore.entities.Book;
+
 import java.util.List;
 
 /**
@@ -15,7 +18,7 @@ public class BookAppMain {
         book.setPublishDate(new java.util.Date());
         book.setComment("좋은 책입니다.");
 
-        BookApp app = new BookApp();
+        BookDao app = new BookDao();
         app.add(book);
 
         List<Book> books = app.getAll();

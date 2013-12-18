@@ -1,9 +1,12 @@
-package me.xyzlast.bookstore;
+package me.xyzlast.bookstore.dao;
 
+import me.xyzlast.bookstore.constants.BookStatus;
+import me.xyzlast.bookstore.entities.Book;
 import me.xyzlast.bookstore.sql.ConnectionFactory;
+import me.xyzlast.bookstore.sql.ExecuteSelectQuery;
+import me.xyzlast.bookstore.sql.ExecuteUpdateQuery;
+import me.xyzlast.bookstore.sql.SqlExecutor;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,33 +14,15 @@ import java.util.List;
 /**
  * Created by ykyoon on 12/18/13.
  */
-public class BookApp {
-    interface ExecuteUpdateQuery {
-        PreparedStatement getPreparedStatement(Connection conn) throws SQLException;
+public class BookDao {
+    private SqlExecutor executor;
+
+    public SqlExecutor getExecutor() {
+        return executor;
     }
 
-    interface ExecuteSelectQuery {
-        PreparedStatement getPreparedStatement(Connection conn) throws SQLException;
-        Object parseResultSet(ResultSet rs) throws SQLException;
-    }
-
-    private ConnectionFactory connectionFactory;
-    public ConnectionFactory getConnectionFactory() {
-        return connectionFactory;
-    }
-    public void setConnectionFactory(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
-
-
-    private void closeObject(AutoCloseable... closeables) throws Exception {
-        for(AutoCloseable c : closeables) {
-            try {
-                c.close();
-            } catch(Exception ex) {
-
-            }
-        }
+    public void setExecutor(SqlExecutor executor) {
+        this.executor = executor;
     }
 
     private Book convertBook(ResultSet rs) throws SQLException {
@@ -48,48 +33,37 @@ public class BookApp {
         java.util.Date date = new java.util.Date(rs.getDate("publishDate").getTime());
         book.setPublishDate(date);
         book.setComment(rs.getString("comment"));
+        book.setRentUserId((Integer) rs.getObject("rentUserId"));
+        book.setStatus(BookStatus.valueOf(rs.getInt("status")));
 
         return book;
     }
 
-    private Object execute(ExecuteSelectQuery query) throws Exception {
-        Connection conn = connectionFactory.getConnection();
-        PreparedStatement ps = query.getPreparedStatement(conn);
-        ResultSet rs = ps.executeQuery();
-        Object result = query.parseResultSet(rs);
-        closeObject(conn, ps, rs);
-        return result;
-    }
-
-    private void execute(ExecuteUpdateQuery query) throws Exception {
-        Connection conn = connectionFactory.getConnection();
-        PreparedStatement ps = query.getPreparedStatement(conn);
-        ps.executeUpdate();
-        closeObject(conn, ps);
-    }
 
     public void add(final Book book) throws Exception {
         ExecuteUpdateQuery query = new ExecuteUpdateQuery() {
             @Override
             public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
-                PreparedStatement st = conn.prepareStatement("insert books(name, author, publishDate, comment, id) values(?, ?, ?, ?, ?)");
+                PreparedStatement st = conn.prepareStatement("insert books(name, author, publishDate, comment, status, rentUserId, id) values(?, ?, ?, ?, ?, ?, ?)");
                 st.setString(1, book.getName());
                 st.setString(2, book.getAuthor());
                 java.sql.Date sqlDate = new java.sql.Date(book.getPublishDate().getTime());
                 st.setDate(3, sqlDate);
                 st.setString(4, book.getComment());
-                st.setInt(5, book.getId());
+                st.setInt(5, book.getStatus().getValue());
+                st.setObject(6, book.getRentUserId());
+                st.setInt(7, book.getId());
                 return st;
             }
         };
-        execute(query);
+        executor.execute(query);
     }
 
     public Book get(final int id) throws Exception {
         ExecuteSelectQuery query = new ExecuteSelectQuery() {
             @Override
             public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
-                PreparedStatement st = conn.prepareStatement("select id, name, author, publishDate, comment from books where id=?");
+                PreparedStatement st = conn.prepareStatement("select id, name, author, publishDate, comment, status, rentUserId from books where id=?");
                 st.setInt(1, id);
                 return st;
             }
@@ -99,14 +73,14 @@ public class BookApp {
                 return convertBook(rs);
             }
         };
-        return (Book) execute(query);
+        return (Book) executor.execute(query);
     }
 
     public List<Book> search(final String name) throws Exception {
         ExecuteSelectQuery query = new ExecuteSelectQuery() {
             @Override
             public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
-                PreparedStatement ps = conn.prepareStatement("select id, name, author, publishDate, comment from books where name like ?");
+                PreparedStatement ps = conn.prepareStatement("select id, name, author, publishDate, comment, status, rentUserId from books where name like ?");
                 ps.setString(1, "%" + name + "%");
                 return ps;
             }
@@ -121,7 +95,7 @@ public class BookApp {
                 return books;
             }
         };
-        return (List<Book>) execute(query);
+        return (List<Book>) executor.execute(query);
     }
 
     public int countAll() throws Exception {
@@ -136,23 +110,25 @@ public class BookApp {
                 return rs.getInt(1);
             }
         };
-        return (int) execute(query);
+        return (int) executor.execute(query);
     }
 
     public Book update(final Book book) throws Exception {
         ExecuteUpdateQuery query = new ExecuteUpdateQuery() {
             @Override
             public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
-                PreparedStatement ps = conn.prepareStatement("update books set name=?, author=?, publishDate=?, comment=? where id=?");
+                PreparedStatement ps = conn.prepareStatement("update books set name=?, author=?, publishDate=?, comment=?, status=?, rentUserId=? where id=?");
                 ps.setString(1, book.getName());
                 ps.setString(2, book.getAuthor());
                 ps.setDate(3, new Date(book.getPublishDate().getTime()));
                 ps.setString(4, book.getComment());
-                ps.setInt(5, book.getId());
+                ps.setInt(5, book.getStatus().getValue());
+                ps.setObject(6, book.getRentUserId());
+                ps.setInt(7, book.getId());
                 return ps;
             }
         };
-        execute(query);
+        executor.execute(query);
         return book;
     }
 
@@ -160,7 +136,7 @@ public class BookApp {
         ExecuteSelectQuery query = new ExecuteSelectQuery() {
             @Override
             public PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
-                return conn.prepareStatement("select id, name, author, publishDate, comment from books");
+                return conn.prepareStatement("select id, name, author, publishDate, comment, status, rentUserId from books");
             }
 
             @Override
@@ -173,7 +149,7 @@ public class BookApp {
                 return books;
             }
         };
-        return (List<Book>) execute(query);
+        return (List<Book>) executor.execute(query);
     }
 
     public void deleteAll() throws Exception {
@@ -183,6 +159,6 @@ public class BookApp {
                 return conn.prepareStatement("delete from books");
             }
         };
-        execute(query);
+        executor.execute(query);
     }
 }

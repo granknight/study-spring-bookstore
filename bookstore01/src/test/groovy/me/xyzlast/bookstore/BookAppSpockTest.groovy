@@ -1,5 +1,8 @@
 package me.xyzlast.bookstore
 
+import me.xyzlast.bookstore.constants.BookStatus
+import me.xyzlast.bookstore.dao.BookDao
+import me.xyzlast.bookstore.entities.Book
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
@@ -9,18 +12,21 @@ import spock.lang.Specification
  * Created by ykyoon on 12/18/13.
  */
 @ContextConfiguration("classpath:applicationContext.xml")
-class BookAppSpockBooTest extends Specification {
+class BookDaoSpockBooTest extends Specification {
     public static final String PREFIX_BOOK_NAME = "BOOK_NAME_"
     public static final String PREFIX_BOOK_AUTHOR = "BOOK_AUTHOR_"
     public static final String PREFIX_COMMENT = "COMMENT_"
 
     @Autowired
     ApplicationContext context;
-    BookApp bookApp;
+    BookDao bookApp;
 
     def setup() {
-        bookApp = context.getBean("bookApp", BookApp)
+        when:
+        bookApp = context.getBean("bookApp", BookDao)
         bookApp.deleteAll()
+        then:
+        bookApp.countAll() == 0
     }
 
     def cleanup() {
@@ -35,6 +41,8 @@ class BookAppSpockBooTest extends Specification {
             book.author = PREFIX_BOOK_AUTHOR + i
             book.comment = PREFIX_COMMENT + i
             book.publishDate = new Date()
+            book.rentUserId = null
+            book.status = BookStatus.CanRent
 
             bookApp.add(book)
         }

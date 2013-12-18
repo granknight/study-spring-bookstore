@@ -1,5 +1,8 @@
 package me.xyzlast.bookstore;
 
+import me.xyzlast.bookstore.constants.BookStatus;
+import me.xyzlast.bookstore.dao.BookDao;
+import me.xyzlast.bookstore.entities.Book;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,10 +25,10 @@ import static org.junit.Assert.assertThat;
 @SuppressWarnings("unused")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
-public class BookAppTest {
+public class BookDaoTest {
     @Autowired
     private ApplicationContext context;
-    private BookApp bookApp;
+    private BookDao bookDao;
 
     private List<Book> getBooks() {
         Book book1 = new Book();
@@ -34,6 +37,7 @@ public class BookAppTest {
         book1.setAuthor("autor name 01");
         book1.setComment("comment01");
         book1.setPublishDate(new Date());
+        book1.setStatus(BookStatus.CanRent);
 
         Book book2 = new Book();
         book2.setId(2);
@@ -41,6 +45,7 @@ public class BookAppTest {
         book2.setAuthor("autor name 02");
         book2.setComment("comment02");
         book2.setPublishDate(new Date());
+        book2.setStatus(BookStatus.CanRent);
 
         Book book3 = new Book();
         book3.setId(3);
@@ -48,13 +53,14 @@ public class BookAppTest {
         book3.setAuthor("autor name 03");
         book3.setComment("comment03");
         book3.setPublishDate(new Date());
+        book3.setStatus(BookStatus.CanRent);
 
         List<Book> books = Arrays.asList(book1, book2, book3);
         return books;
     }
 
     private void compareBook(Book book) throws Exception {
-        Book dbBook = bookApp.get(book.getId());
+        Book dbBook = bookDao.get(book.getId());
         assertThat(dbBook.getName(), is(book.getName()));
         assertThat(dbBook.getAuthor(), is(book.getAuthor()));
         assertThat(dbBook.getComment(), is(book.getComment()));
@@ -64,9 +70,9 @@ public class BookAppTest {
 
     @Before
     public void setUp() throws Exception {
-        bookApp = (BookApp) context.getBean("bookApp");
-        bookApp.deleteAll();
-        assertThat(bookApp.countAll(), is(0));
+        bookDao = (BookDao) context.getBean("bookApp");
+        bookDao.deleteAll();
+        assertThat(bookDao.countAll(), is(0));
     }
 
     @Test
@@ -74,9 +80,9 @@ public class BookAppTest {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
-            bookApp.add(book);
+            bookDao.add(book);
             count++;
-            assertThat(bookApp.countAll(), is(count));
+            assertThat(bookDao.countAll(), is(count));
         }
     }
 
@@ -85,14 +91,14 @@ public class BookAppTest {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
-            bookApp.add(book);
+            bookDao.add(book);
             count++;
-            assertThat(bookApp.countAll(), is(count));
+            assertThat(bookDao.countAll(), is(count));
 
             book.setName("changed name");
             book.setPublishDate(new Date());
             book.setAuthor("changed author");
-            bookApp.update(book);
+            bookDao.update(book);
 
             compareBook(book);
         }
@@ -103,12 +109,12 @@ public class BookAppTest {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
-            bookApp.add(book);
+            bookDao.add(book);
             count++;
-            assertThat(bookApp.countAll(), is(count));
+            assertThat(bookDao.countAll(), is(count));
         }
 
-        List<Book> books2 = bookApp.getAll();
+        List<Book> books2 = bookDao.getAll();
         assertThat(books2.size(), is(books.size()));
     }
 
@@ -117,21 +123,21 @@ public class BookAppTest {
         List<Book> books = getBooks();
         int count = 0;
         for(Book book : books) {
-            bookApp.add(book);
+            bookDao.add(book);
             count++;
-            assertThat(bookApp.countAll(), is(count));
+            assertThat(bookDao.countAll(), is(count));
         }
 
-        List<Book> searchedBooks = bookApp.search("01");
+        List<Book> searchedBooks = bookDao.search("01");
         assertThat(searchedBooks.size(), is(1));
 
-        searchedBooks = bookApp.search("02");
+        searchedBooks = bookDao.search("02");
         assertThat(searchedBooks.size(), is(1));
 
-        searchedBooks = bookApp.search("03");
+        searchedBooks = bookDao.search("03");
         assertThat(searchedBooks.size(), is(1));
 
-        searchedBooks = bookApp.search("name");
+        searchedBooks = bookDao.search("name");
         assertThat(searchedBooks.size(), is(3));
     }
 }

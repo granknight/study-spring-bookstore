@@ -1,5 +1,6 @@
 package me.xyzlast.bookstore
 
+import me.xyzlast.bookstore.dao.BookDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
@@ -10,19 +11,19 @@ import spock.lang.Specification
  * Created by ykyoon on 12/18/13.
  */
 @ContextConfiguration("classpath:applicationContext.xml")
-class BookAppLifeTimeTest extends Specification {
+class BookDaoLifeTimeTest extends Specification {
     @Autowired
     ApplicationContext context;
 
     @Shared
-    static List<BookApp> bookApps = new ArrayList<>()
+    static List<BookDao> bookApps = new ArrayList<>()
 
     def "singleton type object 확인"() {
-        println "singleton bookApp list : "
+        println "singleton bookDao list : "
         bookApps.clear()
         when:
         (0..9).each {
-            BookApp bookApp = context.getBean("bookApp-singleton")
+            BookDao bookApp = context.getBean("bookApp-singleton")
             println bookApp
             if(!bookApps.contains(bookApp)) {
                 bookApps.add(bookApp)
@@ -33,11 +34,11 @@ class BookAppLifeTimeTest extends Specification {
     }
 
     def "prototype type object 확인"() {
-        println "prototype bookApp list : "
+        println "prototype bookDao list : "
         bookApps.clear()
         when:
         (0..9).each {
-            BookApp bookApp = context.getBean("bookApp-prototype")
+            BookDao bookApp = context.getBean("bookApp-prototype")
             println bookApp
             if(!bookApps.contains(bookApp)) {
                 bookApps.add(bookApp)

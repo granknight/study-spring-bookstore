@@ -4,20 +4,24 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="connectionFactory" class="me.xyzlast.bookstore.sql.ConnectionFactory">
         <property name="driverName" value="com.mysql.jdbc.Driver"></property>
-        <property name="url" value="jdbc:mysql://localhost/bookstore"></property>
+        <property name="url" value="jdbc:mysql://localhost/bookstore2"></property>
         <property name="username" value="root"></property>
         <property name="password" value="qwer12#$"></property>
     </bean>
 
-    <bean id="bookApp" class="me.xyzlast.bookstore.BookApp">
-        <property name="connectionFactory" ref="connectionFactory"></property>
+    <bean id="sqlExecutor" class="me.xyzlast.bookstore.sql.SqlExecutor">
+        <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
-    <bean id="bookApp-singleton" class="me.xyzlast.bookstore.BookApp" scope="singleton">
-        <property name="connectionFactory" ref="connectionFactory"></property>
+    <bean id="bookApp" class="me.xyzlast.bookstore.dao.BookDao">
+        <property name="executor" ref="sqlExecutor"/>
     </bean>
 
-    <bean id="bookApp-prototype" class="me.xyzlast.bookstore.BookApp" scope="prototype">
-        <property name="connectionFactory" ref="connectionFactory"></property>
+    <bean id="bookApp-singleton" class="me.xyzlast.bookstore.dao.BookDao" scope="singleton">
+        <property name="executor" ref="sqlExecutor"/>
+    </bean>
+
+    <bean id="bookApp-prototype" class="me.xyzlast.bookstore.dao.BookDao" scope="prototype">
+        <property name="executor" ref="sqlExecutor"/>
     </bean>
 </beans>
