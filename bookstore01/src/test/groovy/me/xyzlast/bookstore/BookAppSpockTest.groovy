@@ -1,17 +1,25 @@
 package me.xyzlast.bookstore
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
 /**
  * Created by ykyoon on 12/18/13.
  */
+@ContextConfiguration("classpath:applicationContext.xml")
 class BookAppSpockBooTest extends Specification {
     public static final String PREFIX_BOOK_NAME = "BOOK_NAME_"
     public static final String PREFIX_BOOK_AUTHOR = "BOOK_AUTHOR_"
     public static final String PREFIX_COMMENT = "COMMENT_"
-    BookApp bookApp = new BookApp()
+
+    @Autowired
+    ApplicationContext context;
+    BookApp bookApp;
 
     def setup() {
+        bookApp = context.getBean("bookApp", BookApp)
         bookApp.deleteAll()
     }
 
