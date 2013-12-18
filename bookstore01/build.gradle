@@ -1,0 +1,7 @@
+apply plugin : 'application'
+
+dependencies {
+	compile 'mysql:mysql-connector-java:5.1.27'
+}
+
+mainClassName = "me.xyzlast.bookstore.BookAppMain"
