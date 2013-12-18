@@ -5,14 +5,18 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'eclipse-wtp'
     apply plugin: 'idea'
+    apply plugin: 'groovy'
 
     repositories {
         mavenCentral()
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
     dependencies {
         compile 'org.slf4j:slf4j-api:1.7.5'
         testCompile "junit:junit:4.11"
+        groovy "org.codehaus.groovy:groovy-all:2.1.6"
+        testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
     }
 
     sourceCompatibility = 1.7

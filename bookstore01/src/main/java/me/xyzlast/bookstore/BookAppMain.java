@@ -24,4 +24,18 @@ public class BookAppMain {
         }
         return;
     }
+
+
+    private int seq;
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public String getString(String input) {
+        String upperChar = input.substring(seq, seq + 1).toUpperCase();
+        String firstSeq = input.substring(0, seq).toLowerCase();
+        String lastSeq = input.substring(seq + 1).toLowerCase();
+
+        return firstSeq + upperChar + lastSeq;
+    }
 }
