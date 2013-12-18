@@ -1,5 +1,7 @@
 package me.xyzlast.bookstore;
 
+import me.xyzlast.bookstore.sql.ConnectionFactory;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.sql.*;
@@ -10,7 +12,6 @@ import java.util.List;
  * Created by ykyoon on 12/18/13.
  */
 public class BookApp {
-
     interface ExecuteUpdateQuery {
         PreparedStatement getPreparedStatement(Connection conn) throws SQLException;
     }
@@ -20,13 +21,7 @@ public class BookApp {
         Object parseResultSet(ResultSet rs) throws SQLException;
     }
 
-    private Connection getConnection() throws InstantiationException,
-            IllegalAccessException, ClassNotFoundException, SQLException {
-        String url = "jdbc:mysql://localhost/bookstore";
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection conn = DriverManager.getConnection (url, "root", "qwer12#$");
-        return conn;
-    }
+    private ConnectionFactory connectionFactory;
 
     private void closeObject(AutoCloseable... closeables) throws Exception {
         for(AutoCloseable c : closeables) {
@@ -51,7 +46,7 @@ public class BookApp {
     }
 
     private Object execute(ExecuteSelectQuery query) throws Exception {
-        Connection conn = getConnection();
+        Connection conn = connectionFactory.getConnection();
         PreparedStatement ps = query.getPreparedStatement(conn);
         ResultSet rs = ps.executeQuery();
         Object result = query.parseResultSet(rs);
@@ -60,7 +55,7 @@ public class BookApp {
     }
 
     private void execute(ExecuteUpdateQuery query) throws Exception {
-        Connection conn = getConnection();
+        Connection conn = connectionFactory.getConnection();
         PreparedStatement ps = query.getPreparedStatement(conn);
         ps.executeUpdate();
         closeObject(conn, ps);
