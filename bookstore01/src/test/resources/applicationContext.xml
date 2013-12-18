@@ -12,4 +12,12 @@
     <bean id="bookApp" class="me.xyzlast.bookstore.BookApp">
         <property name="connectionFactory" ref="connectionFactory"></property>
     </bean>
+
+    <bean id="bookApp-singleton" class="me.xyzlast.bookstore.BookApp" scope="singleton">
+        <property name="connectionFactory" ref="connectionFactory"></property>
+    </bean>
+
+    <bean id="bookApp-prototype" class="me.xyzlast.bookstore.BookApp" scope="prototype">
+        <property name="connectionFactory" ref="connectionFactory"></property>
+    </bean>
 </beans>
