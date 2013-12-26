@@ -7,20 +7,11 @@ import java.util.Date;
 /**
  * Created by ykyoon on 12/18/13.
  */
-public class History {
-    private int id;
+public class History extends BaseEntity {
     private int userId;
     private int bookId;
     private ActionType actionType;
     private Date insertTime;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getUserId() {
         return userId;

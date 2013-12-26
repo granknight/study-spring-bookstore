@@ -1,7 +1,6 @@
-package me.xyzlast.bookstore
+package me.xyzlast.bookstore.dao
 
 import me.xyzlast.bookstore.constants.BookStatus
-import me.xyzlast.bookstore.dao.BookDao
 import me.xyzlast.bookstore.entities.Book
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
@@ -9,10 +8,10 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
 /**
- * Created by ykyoon on 12/18/13.
+ * Created by ykyoon on 12/25/13.
  */
 @ContextConfiguration("classpath:applicationContext.xml")
-class BookDaoSpockBooTest extends Specification {
+class BookDaoTest extends Specification {
     public static final String PREFIX_BOOK_NAME = "BOOK_NAME_"
     public static final String PREFIX_BOOK_AUTHOR = "BOOK_AUTHOR_"
     public static final String PREFIX_COMMENT = "COMMENT_"
@@ -23,7 +22,7 @@ class BookDaoSpockBooTest extends Specification {
 
     def setup() {
         when:
-        bookApp = context.getBean("bookApp", BookDao)
+        bookApp = context.getBean("bookDao", BookDao)
         bookApp.deleteAll()
         then:
         bookApp.countAll() == 0

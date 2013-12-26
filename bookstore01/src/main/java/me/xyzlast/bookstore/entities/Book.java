@@ -8,13 +8,12 @@ import me.xyzlast.bookstore.constants.BookStatus;
 import javax.sound.sampled.EnumControl;
 import java.util.Date;
 
-public class Book {
+public class Book extends BaseEntity {
     @Override
     public String toString() {
         return "Book [id=" + id + ", name=" + name + ", author=" + author
                 + ", publishDate=" + publishDate + ", comment=" + comment + "]";
     }
-    private int id;
     private String name;
     private String author;
     private Date publishDate;
@@ -38,12 +37,6 @@ public class Book {
         this.rentUserId = rentUserId;
     }
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
     public String getName() {
         return name;
     }

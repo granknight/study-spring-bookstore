@@ -13,15 +13,13 @@
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
-    <bean id="bookApp" class="me.xyzlast.bookstore.dao.BookDao">
-        <property name="executor" ref="sqlExecutor"/>
+    <bean id="bookDao" class="me.xyzlast.bookstore.dao.BookDao">
+        <property name="sqlExecutor" ref="sqlExecutor"/>
     </bean>
-
-    <bean id="bookApp-singleton" class="me.xyzlast.bookstore.dao.BookDao" scope="singleton">
-        <property name="executor" ref="sqlExecutor"/>
+    <bean id="userDao" class="me.xyzlast.bookstore.dao.UserDao">
+        <property name="sqlExecutor" ref="sqlExecutor"/>
     </bean>
-
-    <bean id="bookApp-prototype" class="me.xyzlast.bookstore.dao.BookDao" scope="prototype">
-        <property name="executor" ref="sqlExecutor"/>
+    <bean id="historyDao" class="me.xyzlast.bookstore.dao.HistoryDao">
+        <property name="sqlExecutor" ref="sqlExecutor"/>
     </bean>
 </beans>

@@ -60,7 +60,7 @@ public class BookDaoTest {
     }
 
     private void compareBook(Book book) throws Exception {
-        Book dbBook = bookDao.get(book.getId());
+        Book dbBook = bookDao.getById(book.getId());
         assertThat(dbBook.getName(), is(book.getName()));
         assertThat(dbBook.getAuthor(), is(book.getAuthor()));
         assertThat(dbBook.getComment(), is(book.getComment()));
@@ -70,7 +70,7 @@ public class BookDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        bookDao = (BookDao) context.getBean("bookApp");
+        bookDao = (BookDao) context.getBean("bookDao");
         bookDao.deleteAll();
         assertThat(bookDao.countAll(), is(0));
     }
@@ -127,17 +127,5 @@ public class BookDaoTest {
             count++;
             assertThat(bookDao.countAll(), is(count));
         }
-
-        List<Book> searchedBooks = bookDao.search("01");
-        assertThat(searchedBooks.size(), is(1));
-
-        searchedBooks = bookDao.search("02");
-        assertThat(searchedBooks.size(), is(1));
-
-        searchedBooks = bookDao.search("03");
-        assertThat(searchedBooks.size(), is(1));
-
-        searchedBooks = bookDao.search("name");
-        assertThat(searchedBooks.size(), is(3));
     }
 }
