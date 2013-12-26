@@ -2,12 +2,10 @@ package me.xyzlast.bookstore.dao;
 
 import me.xyzlast.bookstore.constants.UserLevel;
 import me.xyzlast.bookstore.entities.User;
-import me.xyzlast.bookstore.sql.ConnectionFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by ykyoon on 12/18/13.
