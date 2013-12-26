@@ -46,14 +46,6 @@ public class ConnectionFactory {
         this.password = password;
     }
 
-    public ConnectionFactory() {
-
-    }
-
-    public ConnectionFactory(String driverName, String url, String username, String password) {
-        this.driverName = driverName;
-    }
-
     public Connection getConnection() throws ClassNotFoundException,
             IllegalAccessException, InstantiationException, SQLException {
         Class.forName(driverName).newInstance();

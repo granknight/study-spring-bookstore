@@ -14,11 +14,13 @@ import java.util.List;
  */
 public class UserDao extends AbstractBaseDao<User> {
 
+    public static final String TABLE_NAME = "users";
+    public static final String SELECT_QUERY = "select id, name, password, point, level from users";
+    public static final String ADD_QUERY = "com.sun.jndi.url.iiopname.iiopnameURLContextFactorynsert users(name, password, point, level) values(?, ?, ?, ?)";
+    public static final String UPDATE_QUERY = "update users set name=?, password=?, point=?, level=? where id=?";
+
     public UserDao() {
-        super("users",
-                "select id, name, password, point, level from users",
-                "insert users(name, password, point, level) values(?, ?, ?, ?)",
-                "update users set name=?, password=?, point=?, level=? where id=?");
+        super(TABLE_NAME, SELECT_QUERY, ADD_QUERY, UPDATE_QUERY);
     }
 
     @Override
@@ -34,12 +36,9 @@ public class UserDao extends AbstractBaseDao<User> {
 
     @Override
     protected PreparedStatement setPreparedStatementParametersForUpdate(PreparedStatement ps, User entity) throws SQLException {
-        ps.setString(1, entity.getName());
-        ps.setString(2, entity.getPassword());
-        ps.setInt(3, entity.getPoint());
-        ps.setInt(4, entity.getLevel().getValue());
-        ps.setInt(5, entity.getId());
-        return ps;
+        PreparedStatement addPs = setPreparedStatementParametersForAdd(ps, entity);
+        addPs.setInt(5, entity.getId());
+        return addPs;
     }
 
     @Override

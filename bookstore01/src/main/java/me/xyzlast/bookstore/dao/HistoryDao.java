@@ -13,13 +13,13 @@ import java.util.Date;
  */
 public class HistoryDao extends AbstractBaseDao<History> {
 
+    public static final String TABLE_NAME = "histories";
+    public static final String SELECT_QUERY = "select id, bookId, userId, actionType, insertDate from histories";
+    public static final String ADD_QUERY = "insert histories(bookId, userId, actionType, insertDate) values(?, ?, ?, ?)";
+    public static final String UPDATE_QUERY = "update histories set bookId = ?, userId = ? actionType = ?, insertDate = ? where id = ?";
+
     public HistoryDao() {
-        super(
-                "histories",
-                "select id, bookId, userId, actionType, insertDate from histories",
-                "insert histories(bookId, userId, actionType, insertDate) values(?, ?, ?, ?)",
-                "update histories set bookId = ?, userId = ? actionType = ?, insertDate = ? where id = ?"
-        );
+        super(TABLE_NAME, SELECT_QUERY, ADD_QUERY, UPDATE_QUERY);
     }
 
     @Override
@@ -36,13 +36,9 @@ public class HistoryDao extends AbstractBaseDao<History> {
 
     @Override
     protected PreparedStatement setPreparedStatementParametersForUpdate(PreparedStatement ps, History entity) throws SQLException {
-        ps.setInt(1, entity.getBookId());
-        ps.setInt(2, entity.getUserId());
-        ps.setInt(3, entity.getActionType().getValue());
-        java.sql.Date date = new java.sql.Date(entity.getInsertTime().getTime());
-        ps.setDate(4, date);
-        ps.setInt(5, entity.getId());
-        return ps;
+        PreparedStatement addPs = setPreparedStatementParametersForAdd(ps, entity);
+        addPs.setInt(5, entity.getId());
+        return addPs;
     }
 
     @Override

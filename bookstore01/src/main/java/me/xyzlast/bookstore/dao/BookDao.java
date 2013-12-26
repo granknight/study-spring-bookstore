@@ -11,12 +11,14 @@ import java.sql.SQLException;
  * Created by ykyoon on 12/18/13.
  */
 public class BookDao extends AbstractBaseDao<Book> {
+
+    public static final String TABLE_NAME = "me/xyzlast/bookstore/entities/Book.java";
+    public static final String SELECT_QUERY = "select id, name, author, publishDate, comment, status, rentUserId from books";
+    public static final String ADD_QUERY = "insert books(name, author, publishDate, comment, status, rentUserId, id) values(?, ?, ?, ?, ?, ?, ?)";
+    public static final String UPDATE_QUERY = "update books set name=?, author=?, publishDate=?, comment=?, status=?, rentUserId=? where id=?";
+
     public BookDao() {
-        super("books",
-                "select id, name, author, publishDate, comment, status, rentUserId from books",
-                "insert books(name, author, publishDate, comment, status, rentUserId, id) values(?, ?, ?, ?, ?, ?, ?)",
-                "update books set name=?, author=?, publishDate=?, comment=?, status=?, rentUserId=? where id=?"
-                );
+        super(TABLE_NAME, SELECT_QUERY, ADD_QUERY, UPDATE_QUERY);
     }
 
     @Override
@@ -35,14 +37,8 @@ public class BookDao extends AbstractBaseDao<Book> {
 
     @Override
     protected PreparedStatement setPreparedStatementParametersForUpdate(PreparedStatement ps, Book entity) throws SQLException {
-        ps.setString(1, entity.getName());
-        ps.setString(2, entity.getAuthor());
-        java.sql.Date sqlDate = new java.sql.Date(entity.getPublishDate().getTime());
-        ps.setDate(3, sqlDate);
-        ps.setString(4, entity.getComment());
-        ps.setInt(5, entity.getStatus().getValue());
-        ps.setObject(6, entity.getRentUserId());
-        ps.setInt(7, entity.getId());
+        PreparedStatement addPs = setPreparedStatementParametersForAdd(ps, entity);
+        addPs.setInt(7, entity.getId());
         return ps;
     }
 
@@ -55,7 +51,6 @@ public class BookDao extends AbstractBaseDao<Book> {
         ps.setString(4, entity.getComment());
         ps.setInt(5, entity.getStatus().getValue());
         ps.setObject(6, entity.getRentUserId());
-        ps.setInt(7, entity.getId());
         return ps;
     }
 }

@@ -24,10 +24,10 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements EntityDao
         this.updateQuery = updateQuery;
     }
 
-    private String getAllQuery;
-    private String updateQuery;
-    private String addQuery;
-    private String tableName;
+    private final String getAllQuery;
+    private final String updateQuery;
+    private final String addQuery;
+    private final String tableName;
     private SqlExecutor sqlExecutor;
 
     public SqlExecutor getSqlExecutor() {
