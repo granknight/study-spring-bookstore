@@ -14,7 +14,7 @@ public class UserDao extends AbstractBaseDao<User> {
 
     public static final String TABLE_NAME = "users";
     public static final String SELECT_QUERY = "select id, name, password, point, level from users";
-    public static final String ADD_QUERY = "com.sun.jndi.url.iiopname.iiopnameURLContextFactorynsert users(name, password, point, level) values(?, ?, ?, ?)";
+    public static final String ADD_QUERY = "insert users(name, password, point, level) values(?, ?, ?, ?)";
     public static final String UPDATE_QUERY = "update users set name=?, password=?, point=?, level=? where id=?";
 
     public UserDao() {
@@ -41,10 +41,6 @@ public class UserDao extends AbstractBaseDao<User> {
 
     @Override
     protected PreparedStatement setPreparedStatementParametersForAdd(PreparedStatement ps, User entity) throws SQLException {
-        ps.setString(1, entity.getName());
-        ps.setString(2, entity.getPassword());
-        ps.setInt(3, entity.getPoint());
-        ps.setInt(4, entity.getLevel().getValue());
-        return ps;
+        return initPreparedStatement(ps, entity.getName(), entity.getPassword(), entity.getPoint(), entity.getLevel().getValue());
     }
 }

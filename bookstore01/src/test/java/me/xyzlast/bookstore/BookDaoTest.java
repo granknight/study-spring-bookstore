@@ -94,14 +94,18 @@ public class BookDaoTest {
             bookDao.add(book);
             count++;
             assertThat(bookDao.countAll(), is(count));
+        }
 
-            book.setName("changed name");
-            book.setPublishDate(new Date());
-            book.setAuthor("changed author");
+        List<Book> addedBooks = bookDao.getAll();
+        for(Book book : addedBooks) {
+            book.setName("E_" + book.getName());
+            book.setAuthor("E_" + book.getAuthor());
+            book.setComment("E_" + book.getComment());
+
             bookDao.update(book);
-
             compareBook(book);
         }
+
     }
 
     @Test

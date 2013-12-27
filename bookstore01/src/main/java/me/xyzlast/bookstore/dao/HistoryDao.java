@@ -29,8 +29,7 @@ public class HistoryDao extends AbstractBaseDao<History> {
         history.setBookId(rs.getInt("bookId"));
         history.setUserId(rs.getInt("userId"));
         history.setActionType(ActionType.valueOf(rs.getInt("actionType")));
-        Date dt = new Date(rs.getDate("insertDate").getTime());
-        history.setInsertTime(dt);
+        history.setInsertTime(new Date(rs.getDate("insertDate").getTime()));
         return history;
     }
 
@@ -43,11 +42,6 @@ public class HistoryDao extends AbstractBaseDao<History> {
 
     @Override
     protected PreparedStatement setPreparedStatementParametersForAdd(PreparedStatement ps, History entity) throws SQLException {
-        ps.setInt(1, entity.getBookId());
-        ps.setInt(2, entity.getUserId());
-        ps.setInt(3, entity.getActionType().getValue());
-        java.sql.Date date = new java.sql.Date(entity.getInsertTime().getTime());
-        ps.setDate(4, date);
-        return ps;
+        return initPreparedStatement(ps, entity.getBookId(), entity.getUserId(), entity.getActionType().getValue(), new java.sql.Date(entity.getInsertTime().getTime()));
     }
 }

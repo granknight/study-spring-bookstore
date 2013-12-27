@@ -33,15 +33,11 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements EntityDao
     public SqlExecutor getSqlExecutor() {
         return sqlExecutor;
     }
-
     public void setSqlExecutor(SqlExecutor sqlExecutor) {
         this.sqlExecutor = sqlExecutor;
     }
-
     protected abstract T convertFromResultSet(ResultSet rs) throws SQLException;
-
     protected abstract PreparedStatement setPreparedStatementParametersForUpdate(PreparedStatement ps, T entity) throws SQLException;
-
     protected abstract PreparedStatement setPreparedStatementParametersForAdd(PreparedStatement ps, T entity) throws SQLException;
 
     @Override
@@ -126,5 +122,14 @@ public abstract class AbstractBaseDao<T extends BaseEntity> implements EntityDao
                 return rs.getInt(1);
             }
         });
+    }
+
+    protected PreparedStatement initPreparedStatement(PreparedStatement ps, Object... objects) throws SQLException {
+        int index = 1;
+        for(Object obj : objects) {
+            ps.setObject(index, obj);
+            index++;
+        }
+        return ps;
     }
 }
