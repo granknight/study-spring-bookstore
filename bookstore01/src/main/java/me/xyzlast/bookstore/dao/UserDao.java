@@ -2,10 +2,13 @@ package me.xyzlast.bookstore.dao;
 
 import me.xyzlast.bookstore.constants.UserLevel;
 import me.xyzlast.bookstore.entities.User;
+import me.xyzlast.bookstore.sql.ResultSetToObjectConverter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ykyoon on 12/18/13.
@@ -22,25 +25,37 @@ public class UserDao extends AbstractBaseDao<User> {
     }
 
     @Override
-    protected User convertFromResultSet(ResultSet rs) throws SQLException {
-        User user = new User();
-        user.setId(rs.getInt("id"));
-        user.setName(rs.getString("name"));
-        user.setPassword(rs.getString("password"));
-        user.setPoint(rs.getInt("point"));
-        user.setLevel(UserLevel.valueOf(rs.getInt("level")));
-        return user;
+    protected ResultSetToObjectConverter getConverter() {
+        ResultSetToObjectConverter converter = new ResultSetToObjectConverter() {
+            @Override
+            public List convertTo(ResultSet rs) throws SQLException {
+                List<User> users = new ArrayList<>();
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setName(rs.getString("name"));
+                    user.setPassword(rs.getString("password"));
+                    user.setPoint(rs.getInt("point"));
+                    user.setLevel(UserLevel.valueOf(rs.getInt("level")));
+                    users.add(user);
+                }
+                return users;
+            }
+        };
+        return converter;
     }
 
     @Override
-    protected PreparedStatement setPreparedStatementParametersForUpdate(PreparedStatement ps, User entity) throws SQLException {
-        PreparedStatement addPs = setPreparedStatementParametersForAdd(ps, entity);
-        addPs.setInt(5, entity.getId());
-        return addPs;
+    protected Object[] getUpdateObjects(User user) {
+        return new Object[]{
+                user.getName(), user.getPassword(), user.getPoint(), user.getLevel().getValue(), user.getId()
+        };
     }
 
     @Override
-    protected PreparedStatement setPreparedStatementParametersForAdd(PreparedStatement ps, User entity) throws SQLException {
-        return initPreparedStatement(ps, entity.getName(), entity.getPassword(), entity.getPoint(), entity.getLevel().getValue());
+    protected Object[] getAddObjects(User user) {
+        return new Object[]{
+                user.getName(), user.getPassword(), user.getPoint(), user.getLevel().getValue()
+        };
     }
 }

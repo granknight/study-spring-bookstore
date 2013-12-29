@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by ykyoon on 12/25/13.
  */
-public interface EntityDao<T extends BaseEntity> {
+public interface EntityDao<T> {
     List<T> getAll() throws Exception;
     void deleteAll() throws Exception;
     T getById(int id) throws Exception;

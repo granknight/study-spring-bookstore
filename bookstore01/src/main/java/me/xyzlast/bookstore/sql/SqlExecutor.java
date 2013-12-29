@@ -3,6 +3,8 @@ package me.xyzlast.bookstore.sql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by ykyoon on 12/18/13.
@@ -16,21 +18,31 @@ public class SqlExecutor {
         this.connectionFactory = connectionFactory;
     }
 
-
-    public Object execute(ExecuteSelectQuery query) throws Exception {
+    public void execute(String query, Object... objects) throws Exception {
         Connection conn = connectionFactory.getConnection();
-        PreparedStatement ps = query.getPreparedStatement(conn);
-        ResultSet rs = ps.executeQuery();
-        Object result = query.parseResultSet(rs);
-        closeObject(conn, ps, rs);
-        return result;
+        PreparedStatement ps = initPreparedStatement(conn, query, objects);
+        ps.executeUpdate();
+        closeObject(ps, conn);
     }
 
-    public void execute(ExecuteUpdateQuery query) throws Exception {
+    public List<Object> execute(String query, ResultSetToObjectConverter converter, Object... objects) throws Exception {
         Connection conn = connectionFactory.getConnection();
-        PreparedStatement ps = query.getPreparedStatement(conn);
-        ps.executeUpdate();
-        closeObject(conn, ps);
+        PreparedStatement ps = initPreparedStatement(conn, query, objects);
+        ResultSet rs = ps.executeQuery();
+
+        List<Object> results = converter.convertTo(rs);
+        closeObject(rs, ps, conn);
+        return results;
+    }
+
+    private PreparedStatement initPreparedStatement(Connection conn, String query, Object... objects) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(query);
+        int index = 1;
+        for(Object obj : objects) {
+            ps.setObject(index, obj);
+            index++;
+        }
+        return ps;
     }
 
     private void closeObject(AutoCloseable... closeables) throws Exception {
