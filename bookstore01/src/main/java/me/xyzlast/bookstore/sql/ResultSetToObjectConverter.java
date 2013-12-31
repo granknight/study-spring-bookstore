@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Created by ykyoon on 12/29/13.
  */
-public interface ResultSetToObjectConverter<T> {
-    List<T> convertTo(ResultSet rs) throws SQLException;
+public interface ResultSetToObjectConverter {
+    List<Object> convertTo(ResultSet rs) throws SQLException;
 }

@@ -49,14 +49,21 @@ public class HistoryDao extends AbstractBaseDao<History> {
     @Override
     protected Object[] getUpdateObjects(History history) {
         return new Object[]{
-                history.getBookId(), history.getUserId(), history.getActionType().getValue(), new java.sql.Date(history.getInsertTime().getTime()), history.getId()
+                history.getBookId(),
+                history.getUserId(),
+                history.getActionType().getValue(),
+                new java.sql.Date(history.getInsertTime().getTime()),
+                history.getId()
         };
     }
 
     @Override
     protected Object[] getAddObjects(History history) {
         return new Object[]{
-                history.getBookId(), history.getUserId(), history.getActionType().getValue(), new java.sql.Date(history.getInsertTime().getTime())
+                history.getBookId(),
+                history.getUserId(),
+                history.getActionType().getValue(),
+                new java.sql.Date(history.getInsertTime().getTime())
         };
     }
 }
