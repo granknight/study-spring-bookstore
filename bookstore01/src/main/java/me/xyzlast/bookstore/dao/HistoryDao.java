@@ -3,6 +3,8 @@ package me.xyzlast.bookstore.dao;
 import me.xyzlast.bookstore.constants.ActionType;
 import me.xyzlast.bookstore.entities.History;
 import me.xyzlast.bookstore.sql.ResultSetToObjectConverter;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +16,7 @@ import java.util.List;
 /**
  * Created by ykyoon on 12/24/13.
  */
+@Repository
 public class HistoryDao extends AbstractBaseDao<History> {
 
     public static final String TABLE_NAME = "histories";
@@ -26,24 +29,19 @@ public class HistoryDao extends AbstractBaseDao<History> {
     }
 
     @Override
-    protected ResultSetToObjectConverter getConverter() {
-        ResultSetToObjectConverter converter = new ResultSetToObjectConverter() {
+    protected RowMapper<History> getRowMapper() {
+        return new RowMapper<History>() {
             @Override
-            public List convertTo(ResultSet rs) throws SQLException {
-                List<History> histories = new ArrayList<>();
-                while(rs.next()) {
-                    History history = new History();
-                    history.setId(rs.getInt("id"));
-                    history.setBookId(rs.getInt("bookId"));
-                    history.setUserId(rs.getInt("userId"));
-                    history.setActionType(ActionType.valueOf(rs.getInt("actionType")));
-                    history.setInsertTime(new Date(rs.getDate("insertDate").getTime()));
-                    histories.add(history);
-                }
-                return histories;
+            public History mapRow(ResultSet rs, int rowNum) throws SQLException {
+                History history = new History();
+                history.setId(rs.getInt("id"));
+                history.setBookId(rs.getInt("bookId"));
+                history.setUserId(rs.getInt("userId"));
+                history.setActionType(ActionType.valueOf(rs.getInt("actionType")));
+                history.setInsertTime(new Date(rs.getDate("insertDate").getTime()));
+                return history;
             }
         };
-        return converter;
     }
 
     @Override

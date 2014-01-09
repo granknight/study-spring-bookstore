@@ -3,6 +3,8 @@ package me.xyzlast.bookstore.dao;
 import me.xyzlast.bookstore.constants.UserLevel;
 import me.xyzlast.bookstore.entities.User;
 import me.xyzlast.bookstore.sql.ResultSetToObjectConverter;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +15,7 @@ import java.util.List;
 /**
  * Created by ykyoon on 12/18/13.
  */
+@Repository
 public class UserDao extends AbstractBaseDao<User> {
 
     public static final String TABLE_NAME = "users";
@@ -25,24 +28,19 @@ public class UserDao extends AbstractBaseDao<User> {
     }
 
     @Override
-    protected ResultSetToObjectConverter getConverter() {
-        ResultSetToObjectConverter converter = new ResultSetToObjectConverter() {
+    protected RowMapper<User> getRowMapper() {
+        return new RowMapper<User>() {
             @Override
-            public List convertTo(ResultSet rs) throws SQLException {
-                List<User> users = new ArrayList<>();
-                while (rs.next()) {
-                    User user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setName(rs.getString("name"));
-                    user.setPassword(rs.getString("password"));
-                    user.setPoint(rs.getInt("point"));
-                    user.setLevel(UserLevel.valueOf(rs.getInt("level")));
-                    users.add(user);
-                }
-                return users;
-            }
+            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setPassword(rs.getString("password"));
+                user.setPoint(rs.getInt("point"));
+                user.setLevel(UserLevel.valueOf(rs.getInt("level")));
+                return user;
+            };
         };
-        return converter;
     }
 
     @Override

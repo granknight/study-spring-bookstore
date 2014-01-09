@@ -22,7 +22,7 @@ class BookDaoTest extends Specification {
 
     def setup() {
         when:
-        bookApp = context.getBean("bookDao", BookDao)
+        bookApp = context.getBean(BookDao)
         bookApp.deleteAll()
         then:
         bookApp.countAll() == 0

@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean id="connectionFactory" class="me.xyzlast.bookstore.sql.ConnectionFactory">
-        <property name="driverName" value="com.mysql.jdbc.Driver"></property>
-        <property name="url" value="jdbc:mysql://localhost/bookstore2"></property>
-        <property name="username" value="root"></property>
-        <property name="password" value="qwer12#$"></property>
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="connection.properties"></context:property-placeholder>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="${connect.url}"></property>
+        <property name="driverClassName" value="${connect.driver}"></property>
+        <property name="username" value="${connect.username}"></property>
+        <property name="password" value="${connect.password}"></property>
     </bean>
 
-    <bean id="sqlExecutor" class="me.xyzlast.bookstore.sql.SqlExecutor">
-        <property name="connectionFactory" ref="connectionFactory"/>
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
     </bean>
 
-    <bean id="bookDao" class="me.xyzlast.bookstore.dao.BookDao">
-        <property name="sqlExecutor" ref="sqlExecutor"/>
-    </bean>
-    <bean id="userDao" class="me.xyzlast.bookstore.dao.UserDao">
-        <property name="sqlExecutor" ref="sqlExecutor"/>
-    </bean>
-    <bean id="historyDao" class="me.xyzlast.bookstore.dao.HistoryDao">
-        <property name="sqlExecutor" ref="sqlExecutor"/>
-    </bean>
+    <context:component-scan base-package="me.xyzlast.bookstore.dao"></context:component-scan>
 </beans>
