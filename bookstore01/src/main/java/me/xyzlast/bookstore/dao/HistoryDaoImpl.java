@@ -17,14 +17,14 @@ import java.util.List;
  * Created by ykyoon on 12/24/13.
  */
 @Repository
-public class HistoryDao extends AbstractBaseDao<History> {
+public class HistoryDaoImpl extends AbstractBaseDao<History> {
 
     public static final String TABLE_NAME = "histories";
     public static final String SELECT_QUERY = "select id, bookId, userId, actionType, insertDate from histories";
     public static final String ADD_QUERY = "insert histories(bookId, userId, actionType, insertDate) values(?, ?, ?, ?)";
     public static final String UPDATE_QUERY = "update histories set bookId = ?, userId = ? actionType = ?, insertDate = ? where id = ?";
 
-    public HistoryDao() {
+    public HistoryDaoImpl() {
         super(TABLE_NAME, SELECT_QUERY, ADD_QUERY, UPDATE_QUERY);
     }
 

@@ -16,14 +16,14 @@ import java.util.List;
  * Created by ykyoon on 12/18/13.
  */
 @Repository
-public class UserDao extends AbstractBaseDao<User> {
+public class UserDaoImpl extends AbstractBaseDao<User> {
 
     public static final String TABLE_NAME = "users";
     public static final String SELECT_QUERY = "select id, name, password, point, level from users";
     public static final String ADD_QUERY = "insert users(name, password, point, level) values(?, ?, ?, ?)";
     public static final String UPDATE_QUERY = "update users set name=?, password=?, point=?, level=? where id=?";
 
-    public UserDao() {
+    public UserDaoImpl() {
         super(TABLE_NAME, SELECT_QUERY, ADD_QUERY, UPDATE_QUERY);
     }
 

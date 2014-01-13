@@ -16,14 +16,14 @@ import java.util.List;
  * Created by ykyoon on 12/18/13.
  */
 @Repository
-public class BookDao extends AbstractBaseDao<Book> {
+public class BookDaoImpl extends AbstractBaseDao<Book> {
 
     public static final String TABLE_NAME = "books";
     public static final String SELECT_QUERY = "select id, name, author, publishDate, comment, status, rentUserId from books";
     public static final String ADD_QUERY = "insert books(name, author, publishDate, comment, status, rentUserId) values(?, ?, ?, ?, ?, ?)";
     public static final String UPDATE_QUERY = "update books set name=?, author=?, publishDate=?, comment=?, status=?, rentUserId=? where id=?";
 
-    public BookDao() {
+    public BookDaoImpl() {
         super(TABLE_NAME, SELECT_QUERY, ADD_QUERY, UPDATE_QUERY);
     }
 

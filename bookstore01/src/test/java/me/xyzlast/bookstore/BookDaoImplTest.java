@@ -1,7 +1,7 @@
 package me.xyzlast.bookstore;
 
 import me.xyzlast.bookstore.constants.BookStatus;
-import me.xyzlast.bookstore.dao.BookDao;
+import me.xyzlast.bookstore.dao.BookDaoImpl;
 import me.xyzlast.bookstore.entities.Book;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,10 +25,10 @@ import static org.junit.Assert.assertThat;
 @SuppressWarnings("unused")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
-public class BookDaoTest {
+public class BookDaoImplTest {
     @Autowired
     private ApplicationContext context;
-    private BookDao bookDao;
+    private BookDaoImpl bookDao;
 
     private List<Book> getBooks() {
         Book book1 = new Book();
@@ -70,7 +70,7 @@ public class BookDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        bookDao = (BookDao) context.getBean("bookDao");
+        bookDao = (BookDaoImpl) context.getBean("bookDaoImpl");
         bookDao.deleteAll();
         assertThat(bookDao.countAll(), is(0));
     }

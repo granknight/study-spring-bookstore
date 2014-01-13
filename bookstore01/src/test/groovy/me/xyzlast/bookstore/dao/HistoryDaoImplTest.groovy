@@ -15,7 +15,7 @@ import spock.lang.Specification
  * Created by ykyoon on 12/25/13.
  */
 @ContextConfiguration("classpath:applicationContext.xml")
-class HistoryDaoTest extends Specification {
+class HistoryDaoImplTest extends Specification {
     public static final String PREFIX_BOOK_NAME = "BOOK_NAME_"
     public static final String PREFIX_BOOK_AUTHOR = "BOOK_AUTHOR_"
     public static final String PREFIX_COMMENT = "COMMENT_"
@@ -23,14 +23,14 @@ class HistoryDaoTest extends Specification {
     @Autowired
     ApplicationContext context
 
-    BookDao bookDao
-    UserDao userDao
-    HistoryDao historyDao
+    BookDaoImpl bookDao
+    UserDaoImpl userDao
+    HistoryDaoImpl historyDao
 
     def setup() {
-        bookDao = context.getBean("bookDao")
-        userDao = context.getBean("userDao")
-        historyDao = context.getBean("historyDao")
+        bookDao = context.getBean("bookDaoImpl")
+        userDao = context.getBean("userDaoImpl")
+        historyDao = context.getBean("historyDaoImpl")
     }
 
     def addBooks() {

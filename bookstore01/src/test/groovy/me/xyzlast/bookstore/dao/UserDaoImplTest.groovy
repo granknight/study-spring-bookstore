@@ -11,14 +11,14 @@ import spock.lang.Specification
  * Created by ykyoon on 12/25/13.
  */
 @ContextConfiguration("classpath:applicationContext.xml")
-class UserDaoTest extends Specification {
+class UserDaoImplTest extends Specification {
     @Autowired
     private ApplicationContext context;
-    private UserDao userDao;
+    private UserDaoImpl userDao;
 
     def setup() {
         when:
-        userDao = context.getBean("userDao", UserDao);
+        userDao = context.getBean("userDaoImpl", UserDaoImpl);
         userDao.deleteAll()
 
         then:

@@ -11,18 +11,18 @@ import spock.lang.Specification
  * Created by ykyoon on 12/25/13.
  */
 @ContextConfiguration("classpath:applicationContext.xml")
-class BookDaoTest extends Specification {
+class BookDaoImplTest extends Specification {
     public static final String PREFIX_BOOK_NAME = "BOOK_NAME_"
     public static final String PREFIX_BOOK_AUTHOR = "BOOK_AUTHOR_"
     public static final String PREFIX_COMMENT = "COMMENT_"
 
     @Autowired
     ApplicationContext context;
-    BookDao bookApp;
+    BookDaoImpl bookApp;
 
     def setup() {
         when:
-        bookApp = context.getBean(BookDao)
+        bookApp = context.getBean(BookDaoImpl)
         bookApp.deleteAll()
         then:
         bookApp.countAll() == 0
