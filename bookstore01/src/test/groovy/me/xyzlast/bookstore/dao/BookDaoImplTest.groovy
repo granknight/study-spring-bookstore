@@ -41,8 +41,14 @@ class BookDaoImplTest extends Specification {
             book.comment = PREFIX_COMMENT + i
             book.publishDate = new Date()
             book.rentUserId = null
-            book.status = BookStatus.CanRent
 
+            if((i % 3) == 0) {
+                book.status = BookStatus.CanRent
+            } else if((i % 3) == 1) {
+                book.status = BookStatus.Missing
+            } else {
+                book.status = BookStatus.RentNow
+            }
             bookApp.add(book)
         }
     }
@@ -92,5 +98,25 @@ class BookDaoImplTest extends Specification {
             it.author.startsWith(PREFIX_BOOK_AUTHOR) == true
             it.comment.startsWith(PREFIX_COMMENT) == true
         }
+    }
+
+    def "책 리스트를 얻어낼 때, 상태값으로 얻어지는 것을 확인한다."() {
+        when:
+        addBooks()
+        def count = bookApp.countAll()
+        def bookList = bookApp.listByStatus()
+
+        then:
+        count == 10
+        bookList[0].status == BookStatus.CanRent
+        bookList[1].status == BookStatus.CanRent
+        bookList[2].status == BookStatus.CanRent
+        bookList[3].status == BookStatus.CanRent
+        bookList[4].status == BookStatus.RentNow
+        bookList[5].status == BookStatus.RentNow
+        bookList[6].status == BookStatus.RentNow
+        bookList[7].status == BookStatus.Missing
+        bookList[8].status == BookStatus.Missing
+        bookList[9].status == BookStatus.Missing
     }
 }

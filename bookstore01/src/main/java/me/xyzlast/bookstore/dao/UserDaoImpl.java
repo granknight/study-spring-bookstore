@@ -16,7 +16,7 @@ import java.util.List;
  * Created by ykyoon on 12/18/13.
  */
 @Repository
-public class UserDaoImpl extends AbstractBaseDao<User> {
+public class UserDaoImpl extends AbstractBaseDao<User> implements UserDao {
 
     public static final String TABLE_NAME = "users";
     public static final String SELECT_QUERY = "select id, name, password, point, level from users";

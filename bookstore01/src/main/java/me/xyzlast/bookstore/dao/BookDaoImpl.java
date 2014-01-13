@@ -2,21 +2,18 @@ package me.xyzlast.bookstore.dao;
 
 import me.xyzlast.bookstore.constants.BookStatus;
 import me.xyzlast.bookstore.entities.Book;
-import me.xyzlast.bookstore.sql.ResultSetToObjectConverter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ykyoon on 12/18/13.
  */
 @Repository
-public class BookDaoImpl extends AbstractBaseDao<Book> {
+public class BookDaoImpl extends AbstractBaseDao<Book> implements BookDao {
 
     public static final String TABLE_NAME = "books";
     public static final String SELECT_QUERY = "select id, name, author, publishDate, comment, status, rentUserId from books";
@@ -59,5 +56,10 @@ public class BookDaoImpl extends AbstractBaseDao<Book> {
                 book.getName(), book.getAuthor(), new java.sql.Date(book.getPublishDate().getTime()),
                 book.getComment(), book.getStatus().getValue(), book.getRentUserId()
         };
+    }
+
+    @Override
+    public List<Book> listByStatus() {
+        return getJdbcTemplate().query(SELECT_QUERY + " Order By status", getRowMapper());
     }
 }

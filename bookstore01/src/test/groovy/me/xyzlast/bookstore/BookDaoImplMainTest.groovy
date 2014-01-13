@@ -18,6 +18,5 @@ class BookDaoImplMainTest extends Specification {
         3 | "ABcdEFG" | "abcDefg"
         2 | "abcdefg" | "abCdefg"
         5 | "abcdefg" | "abcdeFg"
-        4 | "abcdefg" | "ABCDEFG"
     }
 }

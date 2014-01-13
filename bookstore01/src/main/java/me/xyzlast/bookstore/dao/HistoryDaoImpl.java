@@ -17,7 +17,7 @@ import java.util.List;
  * Created by ykyoon on 12/24/13.
  */
 @Repository
-public class HistoryDaoImpl extends AbstractBaseDao<History> {
+public class HistoryDaoImpl extends AbstractBaseDao<History> implements HistoryDao {
 
     public static final String TABLE_NAME = "histories";
     public static final String SELECT_QUERY = "select id, bookId, userId, actionType, insertDate from histories";
@@ -63,5 +63,10 @@ public class HistoryDaoImpl extends AbstractBaseDao<History> {
                 history.getActionType().getValue(),
                 new java.sql.Date(history.getInsertTime().getTime())
         };
+    }
+
+    @Override
+    public List<History> listByUser(int userId) {
+        return getJdbcTemplate().query(SELECT_QUERY + " where userId = ?", new Object[] { userId }, getRowMapper());
     }
 }

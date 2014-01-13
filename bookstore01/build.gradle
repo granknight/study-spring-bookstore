@@ -3,5 +3,7 @@ mainClassName = "me.xyzlast.bookstore.BookAppMain"
 
 dependencies {
 	compile 'mysql:mysql-connector-java:5.1.27'
+    compile 'com.jolbox:bonecp:0.8.0.RELEASE'
+    compile 'com.google.guava:guava:15.0'
 }
 

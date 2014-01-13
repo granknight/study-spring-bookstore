@@ -46,32 +46,32 @@ public abstract class AbstractBaseDao<T> implements EntityDao<T> {
     protected abstract Object[] getAddObjects(T t);
 
     @Override
-    public List<T> getAll() throws Exception {
+    public List<T> getAll() {
         return jdbcTemplate.query(getAllQuery, getRowMapper());
     }
 
     @Override
-    public void deleteAll() throws Exception {
+    public void deleteAll() {
         jdbcTemplate.execute("DELETE FROM " + tableName);
     }
 
     @Override
-    public T getById(final int id) throws Exception {
+    public T getById(final int id) {
         return jdbcTemplate.queryForObject(getAllQuery + " WHERE id = ?", new Object[] {id}, getRowMapper());
     }
 
     @Override
-    public void add(final T entity) throws Exception {
+    public void add(final T entity) {
         jdbcTemplate.update(addQuery, getAddObjects(entity));
     }
 
     @Override
-    public void update(final T entity) throws Exception {
+    public void update(final T entity) {
         jdbcTemplate.update(updateQuery, getUpdateObjects(entity));
     }
 
     @Override
-    public int countAll() throws Exception {
+    public int countAll() {
         String query = "SELECT count(*) from " + tableName;
         return jdbcTemplate.queryForObject(query, Integer.class);
     }
