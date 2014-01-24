@@ -90,7 +90,7 @@ class UserServiceImplTest extends Specification {
         point99User != null
         result == true
         afterRentPoint == 100
-        afterUserLevel == UserLevel.MVP
+        afterUserLevel == UserLevel.MASTER
         book.status == BookStatus.RentNow
     }
 
@@ -119,5 +119,27 @@ class UserServiceImplTest extends Specification {
         "point99"  | 99     | 100   | UserLevel.MASTER
         "point299" | 299    | 300   | UserLevel.MVP
         "point301" | 301    | 302   | UserLevel.MVP
+    }
+
+    @DirtiesContext
+    def "Transaction 테스트"() {
+        when:
+        userService.setUserLevelService(new MockUserLevelService())
+        User point99User = userDao.findByName("point99")
+        List<Book> books = bookDao.getAll()
+        Book book = books.get(0)
+        userService.rent(point99User.id, book.id)
+
+        then:
+        thrown(IllegalArgumentException)
+        //NOTE : Transaction이 정상적으로 동작한 경우, BOOK이 update가 되지 않아야지 된다.
+        bookDao.getById(book.getId()).status == BookStatus.CanRent
+    }
+
+    class MockUserLevelService implements UserLevelService {
+        @Override
+        UserLevel getUserLevel(int point) {
+            throw new IllegalArgumentException("IllegalArgument Exception")
+        }
     }
 }

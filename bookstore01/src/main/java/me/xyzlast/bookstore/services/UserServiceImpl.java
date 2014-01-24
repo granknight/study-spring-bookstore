@@ -10,6 +10,7 @@ import me.xyzlast.bookstore.entities.History;
 import me.xyzlast.bookstore.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private UserLevelService userLevelService;
 
     @Override
+    @Transactional
     public boolean rent(int userId, int bookId) {
         User user = userDao.getById(userId);
         user.setPoint(user.getPoint() + 1);
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean returnBook(int userId, int bookId) {
         User user = userDao.getById(userId);
         Book book = bookDao.getById(bookId);
