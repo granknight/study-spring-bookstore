@@ -31,4 +31,20 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="helloImpl" name="helloImpl" class="me.xyzlast.bookstore.aop.HelloImpl"/>
+    <bean name="uppercastAdvice" class="me.xyzlast.bookstore.aop.UppercastAdvice"/>
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>helloImpl</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>uppercastAdvice</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
