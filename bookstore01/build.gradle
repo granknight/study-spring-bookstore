@@ -5,5 +5,9 @@ dependencies {
 	compile 'mysql:mysql-connector-java:5.1.27'
     compile 'com.jolbox:bonecp:0.8.0.RELEASE'
     compile 'com.google.guava:guava:15.0'
+    compile 'org.aspectj:aspectjrt:1.7.4'
+    compile 'org.aspectj:aspectjtools:1.7.4'
+    compile 'org.aspectj:aspectjweaver:1.7.4'
+    compile 'org.springframework:spring-aspects:4.0.0.RELEASE'
 }
 

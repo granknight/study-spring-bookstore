@@ -32,6 +32,7 @@ public class HelloImplTest {
         assertThat(hello, is(not(nullValue())));
         String result = hello.sayHi("ykyoon");
         System.out.println(result);
+        assertThat(result, is(result.toLowerCase()));
     }
 
     @Test
