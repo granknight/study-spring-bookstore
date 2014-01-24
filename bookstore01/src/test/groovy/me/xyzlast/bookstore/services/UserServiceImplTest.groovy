@@ -136,6 +136,13 @@ class UserServiceImplTest extends Specification {
         bookDao.getById(book.getId()).status == BookStatus.CanRent
     }
 
+    def "Transaction이 적용된 Class의 이름 확인"() {
+        when:
+        println(userService.class.name)
+        then:
+        true == true
+    }
+
     class MockUserLevelService implements UserLevelService {
         @Override
         UserLevel getUserLevel(int point) {
