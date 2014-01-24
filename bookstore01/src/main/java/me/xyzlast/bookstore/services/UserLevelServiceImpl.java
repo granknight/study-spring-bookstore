@@ -15,25 +15,25 @@ public class UserLevelServiceImpl implements UserLevelService {
         this.maxNormalPoint = maxNormalPoint;
     }
 
-    public int getMaxMVPPoint() {
-        return maxMVPPoint;
+    public int getMaxMasterPoint() {
+        return maxMasterPoint;
     }
 
-    public void setMaxMVPPoint(int maxMVPPoint) {
-        this.maxMVPPoint = maxMVPPoint;
+    public void setMaxMasterPoint(int maxMasterPoint) {
+        this.maxMasterPoint = maxMasterPoint;
     }
 
     public int maxNormalPoint;
-    public int maxMVPPoint;
+    public int maxMasterPoint;
 
     @Override
     public UserLevel getUserLevel(int point) {
         if(point < maxNormalPoint) {
             return UserLevel.NORMAL;
-        } else if(point < maxMVPPoint) {
-            return UserLevel.MVP;
-        } else {
+        } else if(point < maxMasterPoint) {
             return UserLevel.MASTER;
+        } else {
+            return UserLevel.MVP;
         }
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserService {
     boolean rent(int userId, int bookId);
     boolean returnBook(int userId, int bookId);
-    public List<User> listup();
-    public List<History> getHistories(int userId);
+    List<User> listup();
+    List<History> getHistories(int userId);
+    void setUserLevelService(UserLevelService userLevelService);
 }

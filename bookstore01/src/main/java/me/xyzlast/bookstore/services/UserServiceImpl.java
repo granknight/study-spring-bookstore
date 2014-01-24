@@ -11,6 +11,8 @@ import me.xyzlast.bookstore.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +35,6 @@ public class UserServiceImpl implements UserService {
     public boolean rent(int userId, int bookId) {
         User user = userDao.getById(userId);
         user.setPoint(user.getPoint() + 1);
-        user.setLevel(userLevelService.getUserLevel(user.getPoint()));
 
         Book book = bookDao.getById(bookId);
         if(book.getRentUserId() != null) {
@@ -48,9 +49,11 @@ public class UserServiceImpl implements UserService {
         history.setActionType(ActionType.Rent);
         history.setInsertTime(new Date());
 
-        userDao.update(user);
         bookDao.update(book);
         historyDao.add(history);
+
+        user.setLevel(userLevelService.getUserLevel(user.getPoint()));
+        userDao.update(user);
 
         return true;
     }
@@ -82,5 +85,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<History> getHistories(int userId) {
         return historyDao.listByUser(userId);
+    }
+
+    @Override
+    public void setUserLevelService(UserLevelService userLevelService) {
+        this.userLevelService = userLevelService;
     }
 }

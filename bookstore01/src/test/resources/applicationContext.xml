@@ -23,7 +23,7 @@
     </bean>
     <bean id="userLevelService" class="me.xyzlast.bookstore.services.UserLevelServiceImpl">
         <property name="maxNormalPoint" value="100"></property>
-        <property name="maxMVPPoint" value="300"></property>
+        <property name="maxMasterPoint" value="300"></property>
     </bean>
     <context:component-scan base-package="me.xyzlast.bookstore.dao"/>
     <context:component-scan base-package="me.xyzlast.bookstore.services"/>

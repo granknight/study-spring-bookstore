@@ -56,4 +56,10 @@ public class UserDaoImpl extends AbstractBaseDao<User> implements UserDao {
                 user.getName(), user.getPassword(), user.getPoint(), user.getLevel().getValue()
         };
     }
+
+    @Override
+    public User findByName(String name) {
+        return getJdbcTemplate().queryForObject(SELECT_QUERY + " where name = ?", new Object[] { name },
+                getRowMapper());
+    }
 }
