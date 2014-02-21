@@ -8,6 +8,6 @@ dependencies {
     compile 'org.aspectj:aspectjrt:1.7.4'
     compile 'org.aspectj:aspectjtools:1.7.4'
     compile 'org.aspectj:aspectjweaver:1.7.4'
-    compile 'org.springframework:spring-aspects:4.0.0.RELEASE'
+
 }
 
