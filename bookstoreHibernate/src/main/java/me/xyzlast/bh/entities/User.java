@@ -3,6 +3,7 @@ package me.xyzlast.bh.entities;
 import me.xyzlast.bh.constants.UserLevel;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -16,9 +17,10 @@ public class User {
     private String password;
     private int point;
     private UserLevel level;
-    private Collection<Book> rentBooks;
+    private Collection<Book> rentBooks = new ArrayList<>();
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;

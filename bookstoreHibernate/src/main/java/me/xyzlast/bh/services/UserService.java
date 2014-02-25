@@ -14,4 +14,5 @@ public interface UserService {
     List<User> listup();
     List<History> getHistories(int userId);
     void setUserLevelService(UserLevelService userLevelService);
+    User findByName(String name);
 }

@@ -1,5 +1,7 @@
 package me.xyzlast.bh.entities;
 
+import me.xyzlast.bh.constants.BookStatus;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -14,10 +16,11 @@ public class Book {
     private String author;
     private Timestamp publishDate;
     private String comment;
-    private int status;
+    private BookStatus status;
     private User rentUser;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -69,11 +72,12 @@ public class Book {
 
     @Basic
     @Column(name = "status")
-    public int getStatus() {
+    @Enumerated(EnumType.ORDINAL)
+    public BookStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(BookStatus status) {
         this.status = status;
     }
 
@@ -101,7 +105,7 @@ public class Book {
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + status;
+        result = 31 * result + status.ordinal();
         return result;
     }
 
