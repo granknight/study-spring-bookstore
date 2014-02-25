@@ -17,6 +17,7 @@ subprojects {
         compile 'org.slf4j:slf4j-api:1.7.5'
         compile 'org.springframework:spring-context:4.0.0.RELEASE'
         compile 'org.springframework:spring-aspects:4.0.0.RELEASE'
+        compile 'org.springframework:spring-jdbc:4.0.0.RELEASE'
         compile 'mysql:mysql-connector-java:5.1.27'
         compile 'com.jolbox:bonecp:0.8.0.RELEASE'
         compile 'com.google.guava:guava:15.0'
@@ -26,6 +27,7 @@ subprojects {
 
         testCompile 'org.springframework:spring-test:4.0.0.RELEASE'
         testCompile "junit:junit:4.11"
+
         groovy "org.codehaus.groovy:groovy-all:2.1.6"
         testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
         testCompile "org.spockframework:spock-spring:1.0-groovy-2.0-SNAPSHOT"
