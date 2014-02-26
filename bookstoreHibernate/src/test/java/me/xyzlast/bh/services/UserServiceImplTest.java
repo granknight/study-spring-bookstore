@@ -1,6 +1,7 @@
 package me.xyzlast.bh.services;
 
 import me.xyzlast.bh.configs.HibernateConfiguration;
+import me.xyzlast.bh.configs.JpaConfiguration;
 import me.xyzlast.bh.constants.BookStatus;
 import me.xyzlast.bh.constants.UserLevel;
 import me.xyzlast.bh.entities.Book;
@@ -32,7 +33,8 @@ import java.util.List;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { HibernateConfiguration.class })
+//@ContextConfiguration(classes = { HibernateConfiguration.class })
+@ContextConfiguration(classes = {JpaConfiguration.class})
 @Transactional
 public class UserServiceImplTest {
 
