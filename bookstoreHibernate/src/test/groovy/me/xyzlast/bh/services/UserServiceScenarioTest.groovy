@@ -1,5 +1,6 @@
 package me.xyzlast.bh.services
 
+import me.xyzlast.bh.configs.HibernateConfiguration
 import me.xyzlast.bh.constants.BookStatus
 import me.xyzlast.bh.constants.UserLevel
 import me.xyzlast.bh.dao.BookDao
@@ -10,31 +11,31 @@ import me.xyzlast.bh.dao.UserDao
 import me.xyzlast.bh.dao.UserDaoImpl
 import me.xyzlast.bh.entities.Book
 import me.xyzlast.bh.entities.User
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
+import javax.transaction.Transactional
 import java.sql.Timestamp
 
 /**
  * Created by ykyoon on 2/26/14.
  */
+@ContextConfiguration(classes = [ HibernateConfiguration ])
+@Transactional
 class UserServiceScenarioTest extends Specification {
+    @Autowired
     UserService userService
+    @Autowired
     BookService bookService;
+    @Autowired
     BookDao bookDao
+    @Autowired
     UserDao userDao
+    @Autowired
     HistoryDao historyDao
 
-
     def setup() {
-        bookDao = new BookDaoImpl();
-        userDao = new UserDaoImpl();
-        historyDao = new HistoryDaoImpl();
-
-        bookService = new BookServiceImpl(bookDao);
-        userService = new UserServiceImpl(bookDao, userDao, historyDao);
-        userService.setUserLevelService(new UserLevelServiceImpl());
-
-
         when:
         historyDao.deleteAll()
         userDao.deleteAll()

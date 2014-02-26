@@ -1,5 +1,6 @@
 package me.xyzlast.bh.services;
 
+import me.xyzlast.bh.configs.HibernateConfiguration;
 import me.xyzlast.bh.constants.BookStatus;
 import me.xyzlast.bh.constants.UserLevel;
 import me.xyzlast.bh.dao.*;
@@ -11,9 +12,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 
-/**
- * Created by ykyoon on 2/25/14.
- */
 import static org.hamcrest.core.Is.*;
 import static org.hamcrest.core.IsNull.*;
 import static org.hamcrest.core.IsNot.*;
@@ -22,8 +20,11 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Timestamp;
@@ -35,28 +36,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-//@SuppressWarnings("unused")
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration("classpath:applicationContext.xml")
+/**
+ * Created by ykyoon on 2/25/14.
+ */
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { HibernateConfiguration.class })
+@Transactional
 public class UserServiceImplTest {
 
+    @Autowired
     private UserService userService;
+    @Autowired
     private BookService bookService;
 
+    @Autowired
     private BookDao bookDao;
+    @Autowired
     private UserDao userDao;
+    @Autowired
     private HistoryDao historyDao;
 
     @Before
     public void setUp() {
-        bookDao = new BookDaoImpl();
-        userDao = new UserDaoImpl();
-        historyDao = new HistoryDaoImpl();
-
-        bookService = new BookServiceImpl(bookDao);
-        userService = new UserServiceImpl(bookDao, userDao, historyDao);
-        userService.setUserLevelService(new UserLevelServiceImpl());
-
         historyDao.deleteAll();
         bookDao.deleteAll();
         userDao.deleteAll();
@@ -131,8 +133,16 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testListup() throws Exception {
+    public void testReturnBookWithException() throws Exception {
 
+    }
+
+    @Test
+    public void testListup() throws Exception {
+        List<User> listup = userService.listup();
+        for(User user : listup) {
+            System.out.println(user);
+        }
     }
 
     @Test

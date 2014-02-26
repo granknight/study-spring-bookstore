@@ -11,6 +11,9 @@ import me.xyzlast.bh.entities.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -18,10 +21,15 @@ import java.util.List;
 /**
  * Created by ykyoon on 2/25/14.
  */
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private BookDao bookDao;
+    @Autowired
     private UserDao userDao;
+    @Autowired
     private HistoryDao historyDao;
 
     public UserServiceImpl() {
@@ -34,6 +42,7 @@ public class UserServiceImpl implements UserService {
         this.historyDao = historyDao;
     }
 
+    @Autowired
     private UserLevelService userLevelService;
 
     @Override
@@ -62,14 +71,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean returnBook(int userId, int bookId) {
-        return false;
+        User user = userDao.getById(userId);
+        Book book = bookDao.getById(bookId);
+
+        if(book.getRentUser() == null) {
+            throw new IllegalStateException("Book do not has rent user!");
+        } else if(user.getId() != book.getRentUser().getId()) {
+            throw new IllegalStateException("Rent User is not same in this book");
+        }
+
+        book.setRentUser(null);
+        book.setStatus(BookStatus.CANRENT);
+
+        History history = new History();
+        history.setBook(book);
+        history.setUser(user);
+        history.setActionType(ActionType.RETURN);
+
+        historyDao.add(history);
+        bookDao.update(book);
+
+        return true;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<User> listup() {
-        return null;
+        return userDao.getAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<History> getHistories(int userId) {
         return null;

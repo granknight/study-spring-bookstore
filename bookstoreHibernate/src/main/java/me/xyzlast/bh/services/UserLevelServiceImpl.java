@@ -1,15 +1,17 @@
 package me.xyzlast.bh.services;
 
 import me.xyzlast.bh.constants.UserLevel;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by ykyoon on 2/25/14.
  */
+@Service
 public class UserLevelServiceImpl implements UserLevelService {
 
     public UserLevelServiceImpl() {
-        maxNormalPoint = 100;
-        maxMasterPoint = 300;
+
     }
 
     public UserLevelServiceImpl(int maxNormalPoint, int maxMasterPoint) {
@@ -20,15 +22,14 @@ public class UserLevelServiceImpl implements UserLevelService {
     public int getMaxNormalPoint() {
         return maxNormalPoint;
     }
-
+    @Value(value = "${level.maxNormalPoint}")
     public void setMaxNormalPoint(int maxNormalPoint) {
         this.maxNormalPoint = maxNormalPoint;
     }
-
     public int getMaxMasterPoint() {
         return maxMasterPoint;
     }
-
+    @Value(value = "${level.maxMasterPoint}")
     public void setMaxMasterPoint(int maxMasterPoint) {
         this.maxMasterPoint = maxMasterPoint;
     }

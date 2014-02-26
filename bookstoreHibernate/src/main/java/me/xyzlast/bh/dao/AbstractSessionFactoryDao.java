@@ -3,7 +3,9 @@ package me.xyzlast.bh.dao;
 import me.xyzlast.bh.utils.HibernateAction;
 import me.xyzlast.bh.utils.HibernateExecutor;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -11,82 +13,55 @@ import java.util.List;
  * Created by ykyoon on 2/26/14.
  */
 public abstract class AbstractSessionFactoryDao<T> implements EntityDao<T> {
-    protected final HibernateExecutor executor;
+
+    @Autowired
+    protected SessionFactory sessionFactory;
     private final Class<?> clazz;
 
     protected AbstractSessionFactoryDao(Class<?> clazz) {
         this.clazz = clazz;
-        this.executor = new HibernateExecutor();
     }
 
 
     @Override
     public List<T> getAll() {
-        return (List<T>) executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                return session.createCriteria(clazz).list();
-            }
-        });
+        Session session = sessionFactory.getCurrentSession();
+        return session.createCriteria(clazz).list();
     }
 
     @Override
     public void deleteAll() {
-        executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                List<T> items = getAll();
-                for (T item : items) {
-                    session.delete(item);
-                }
-                return null;
-            }
-        });
+        List<T> items = getAll();
+        Session session = sessionFactory.getCurrentSession();
+        for (T item : items) {
+            session.delete(item);
+        }
     }
 
     @Override
     public T getById(final int id) {
-        return (T) executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                return (T)session.get(clazz, id);
-            }
-        });
+        Session session = sessionFactory.getCurrentSession();
+        return (T)session.get(clazz, id);
     }
 
     @Override
     public void add(final T entity) {
-        executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                session.save(entity);
-                return null;
-            }
-        });
+        Session session = sessionFactory.getCurrentSession();
+        session.save(entity);
     }
 
     @Override
     public void update(final T entity) {
-        executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                session.update(entity);
-                return null;
-            }
-        });
+        Session session = sessionFactory.getCurrentSession();
+        session.update(entity);
     }
 
     @Override
     public int countAll() {
-        Long count = (Long) executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                Long count = (Long) session.createCriteria(clazz)
-                        .setProjection(Projections.rowCount())
-                        .uniqueResult();
-                return count;
-            }
-        });
+        Session session = sessionFactory.getCurrentSession();
+        Long count = (Long) session.createCriteria(clazz)
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
 
         if(count == null) {
             return 0;

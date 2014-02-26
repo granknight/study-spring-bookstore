@@ -4,10 +4,12 @@ import me.xyzlast.bh.entities.User;
 import me.xyzlast.bh.utils.HibernateAction;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by ykyoon on 2/26/14.
  */
+@Repository
 public class UserDaoImpl extends AbstractSessionFactoryDao<User> implements UserDao {
 
     public UserDaoImpl() {
@@ -16,13 +18,9 @@ public class UserDaoImpl extends AbstractSessionFactoryDao<User> implements User
 
     @Override
     public User findByName(final String name) {
-        return (User) executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                return session.createCriteria(User.class)
+        Session session = sessionFactory.getCurrentSession();
+        return (User) session.createCriteria(User.class)
                         .add(Restrictions.eq("name", name))
                         .uniqueResult();
-            }
-        });
     }
 }

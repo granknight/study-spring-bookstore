@@ -4,12 +4,14 @@ import me.xyzlast.bh.entities.Book;
 import me.xyzlast.bh.utils.HibernateAction;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by ykyoon on 2/26/14.
  */
+@Repository
 public class BookDaoImpl extends AbstractSessionFactoryDao<Book> implements BookDao {
     public BookDaoImpl() {
         super(Book.class);
@@ -17,13 +19,9 @@ public class BookDaoImpl extends AbstractSessionFactoryDao<Book> implements Book
 
     @Override
     public List<Book> listByStatus() {
-        return (List<Book>) executor.execute(new HibernateAction() {
-            @Override
-            public Object doProcess(Session session) {
-                return session.createCriteria(Book.class)
-                        .addOrder(Order.asc("status"))
-                        .list();
-            }
-        });
+        Session session = sessionFactory.getCurrentSession();
+        return session.createCriteria(Book.class)
+                .addOrder(Order.asc("status"))
+                .list();
     }
 }
