@@ -1,4 +1,54 @@
 dependencies {
+    def springVersion = "4.0.1.RELEASE"
+
     compile 'org.hibernate:hibernate-core:4.3.1.Final'
-    compile 'org.springframework:spring-orm:4.0.0.RELEASE'
+    compile "org.springframework:spring-orm:${springVersion}"
+
+    def queryDSL = '3.2.4'
+    compile("com.mysema.querydsl:querydsl-core:$queryDSL")
+    compile("com.mysema.querydsl:querydsl-jpa:$queryDSL")
+    compile("com.mysema.querydsl:querydsl-sql:$queryDSL")
+    compile("com.mysema.querydsl:querydsl-apt:$queryDSL") {
+        exclude group: 'com.google.guava'
+    }
+}
+
+sourceSets {
+    generated {
+        java {
+            srcDirs = ['src/main/generated']
+        }
+    }
+}
+
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+    source = sourceSets.main.java
+    //classpath = configurations.compile + configurations.provided
+    classpath = configurations.compile
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+    ]
+    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+    dependsOn generateQueryDSL
+    source generateQueryDSL.destinationDir
+}
+
+compileGeneratedJava {
+    dependsOn generateQueryDSL
+    options.warnings = false
+    classpath += sourceSets.main.runtimeClasspath
+}
+
+clean {
+    delete sourceSets.generated.java.srcDirs
+}
+
+idea {
+    module {
+        sourceDirs += file('src/main/generated')
+    }
 }

@@ -2,20 +2,16 @@ package me.xyzlast.bh.services;
 
 import me.xyzlast.bh.constants.ActionType;
 import me.xyzlast.bh.constants.BookStatus;
-import me.xyzlast.bh.dao.BookDao;
-import me.xyzlast.bh.dao.HistoryDao;
-import me.xyzlast.bh.dao.UserDao;
+import me.xyzlast.bh.intefaces.BookDao;
+import me.xyzlast.bh.intefaces.HistoryDao;
+import me.xyzlast.bh.intefaces.UserDao;
 import me.xyzlast.bh.entities.Book;
 import me.xyzlast.bh.entities.History;
 import me.xyzlast.bh.entities.User;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**

@@ -1,7 +1,7 @@
-package me.xyzlast.bh.dao;
+package me.xyzlast.bh.hibernatedao;
 
 import me.xyzlast.bh.entities.User;
-import me.xyzlast.bh.utils.HibernateAction;
+import me.xyzlast.bh.intefaces.UserDao;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;

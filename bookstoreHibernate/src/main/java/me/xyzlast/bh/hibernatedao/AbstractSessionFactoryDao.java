@@ -1,7 +1,6 @@
-package me.xyzlast.bh.dao;
+package me.xyzlast.bh.hibernatedao;
 
-import me.xyzlast.bh.utils.HibernateAction;
-import me.xyzlast.bh.utils.HibernateExecutor;
+import me.xyzlast.bh.intefaces.EntityDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;

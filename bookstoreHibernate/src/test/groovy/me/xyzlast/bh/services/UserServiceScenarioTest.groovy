@@ -3,12 +3,9 @@ package me.xyzlast.bh.services
 import me.xyzlast.bh.configs.HibernateConfiguration
 import me.xyzlast.bh.constants.BookStatus
 import me.xyzlast.bh.constants.UserLevel
-import me.xyzlast.bh.dao.BookDao
-import me.xyzlast.bh.dao.BookDaoImpl
-import me.xyzlast.bh.dao.HistoryDao
-import me.xyzlast.bh.dao.HistoryDaoImpl
-import me.xyzlast.bh.dao.UserDao
-import me.xyzlast.bh.dao.UserDaoImpl
+import me.xyzlast.bh.intefaces.BookDao
+import me.xyzlast.bh.intefaces.HistoryDao
+import me.xyzlast.bh.intefaces.UserDao
 import me.xyzlast.bh.entities.Book
 import me.xyzlast.bh.entities.User
 import org.springframework.beans.factory.annotation.Autowired

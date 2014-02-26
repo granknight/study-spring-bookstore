@@ -1,7 +1,6 @@
 package me.xyzlast.bh.configs;
 
 import com.jolbox.bonecp.BoneCPDataSource;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -13,14 +12,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
  * Created by ykyoon on 2/26/14.
  */
 @Configuration
-@PropertySource(value = "classpath:connection.properties")
-@ComponentScan(basePackages = { "me.xyzlast.bh.services", "me.xyzlast.bh.dao" })
+@PropertySources({
+        @PropertySource("classpath:connection.properties")
+})
+//@ComponentScan(basePackages = { "me.xyzlast.bh.services", "me.xyzlast.bh.hibernatedao" })
+@ComponentScan(basePackages = { "me.xyzlast.bh.services", "me.xyzlast.bh.querydsl" })
 @EnableTransactionManagement
 public class HibernateConfiguration {
 
@@ -28,7 +31,7 @@ public class HibernateConfiguration {
     private Environment env;
 
     @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() throws IOException {
         PropertySourcesPlaceholderConfigurer configHolder = new PropertySourcesPlaceholderConfigurer();
         return configHolder;
     }
@@ -70,10 +73,8 @@ public class HibernateConfiguration {
         return transactionManager;
     }
 
-    // Hibernate를 이용하는 경우, 반드시 HibernateExceptionTranslator가 Bean에 등록되어야지 된다.
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
-
 }

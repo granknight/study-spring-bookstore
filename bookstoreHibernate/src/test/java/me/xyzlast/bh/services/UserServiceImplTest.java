@@ -3,13 +3,11 @@ package me.xyzlast.bh.services;
 import me.xyzlast.bh.configs.HibernateConfiguration;
 import me.xyzlast.bh.constants.BookStatus;
 import me.xyzlast.bh.constants.UserLevel;
-import me.xyzlast.bh.dao.*;
 import me.xyzlast.bh.entities.Book;
-import me.xyzlast.bh.entities.History;
 import me.xyzlast.bh.entities.User;
-import me.xyzlast.bh.utils.HibernateSessionFactoryBuilder;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import me.xyzlast.bh.intefaces.BookDao;
+import me.xyzlast.bh.intefaces.HistoryDao;
+import me.xyzlast.bh.intefaces.UserDao;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.*;
@@ -20,21 +18,14 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 /**
  * Created by ykyoon on 2/25/14.

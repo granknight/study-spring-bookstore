@@ -1,4 +1,4 @@
-package me.xyzlast.bh.dao;
+package me.xyzlast.bh.intefaces;
 
 import me.xyzlast.bh.entities.User;
 
