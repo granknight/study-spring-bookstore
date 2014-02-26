@@ -97,6 +97,7 @@ public class History {
     }
 
     @PrePersist
+    @PreUpdate
     public void setInsertProperties() {
         Date now = new Date();
         Timestamp time = new Timestamp(now.getTime());

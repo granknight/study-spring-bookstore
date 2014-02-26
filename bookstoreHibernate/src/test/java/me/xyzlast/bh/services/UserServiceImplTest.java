@@ -2,6 +2,7 @@ package me.xyzlast.bh.services;
 
 import me.xyzlast.bh.constants.BookStatus;
 import me.xyzlast.bh.constants.UserLevel;
+import me.xyzlast.bh.dao.*;
 import me.xyzlast.bh.entities.Book;
 import me.xyzlast.bh.entities.History;
 import me.xyzlast.bh.entities.User;
@@ -41,25 +42,29 @@ public class UserServiceImplTest {
 
     private UserService userService;
     private BookService bookService;
-    private SessionFactory sessionFactory;
+
+    private BookDao bookDao;
+    private UserDao userDao;
+    private HistoryDao historyDao;
 
     @Before
     public void setUp() {
-        bookService = new BookServiceImpl();
-        userService = new UserServiceImpl();
-        userService.setUserLevelService(new UserLevelServiceImpl());
-        sessionFactory = HibernateSessionFactoryBuilder.build();
+        bookDao = new BookDaoImpl();
+        userDao = new UserDaoImpl();
+        historyDao = new HistoryDaoImpl();
 
-        deleteAll(History.class);
-        deleteAll(Book.class);
-        deleteAll(User.class);
+        bookService = new BookServiceImpl(bookDao);
+        userService = new UserServiceImpl(bookDao, userDao, historyDao);
+        userService.setUserLevelService(new UserLevelServiceImpl());
+
+        historyDao.deleteAll();
+        bookDao.deleteAll();
+        userDao.deleteAll();
 
         addTestData();
     }
 
     private void addTestData() {
-        Session session = sessionFactory.openSession();
-
         Date now = new Date();
 
         for(int i = 0 ; i < 10 ; i++) {
@@ -68,7 +73,7 @@ public class UserServiceImplTest {
             book.setAuthor("AUTHOR_" + i);
             book.setPublishDate(new Timestamp(now.getTime()));
             book.setStatus(BookStatus.CANRENT);
-            session.save(book);
+            bookDao.add(book);
         }
 
         User point99User = new User();
@@ -76,58 +81,53 @@ public class UserServiceImplTest {
         point99User.setName("point99");
         point99User.setPassword("password");
         point99User.setLevel(UserLevel.NORMAL);
-        session.save(point99User);
+        userDao.add(point99User);
 
         User point299User = new User();
         point299User.setPoint(299);
         point299User.setName("point299");
         point299User.setPassword("password");
         point299User.setLevel(UserLevel.MASTER);
-        session.save(point299User);
+        userDao.add(point299User);
 
         User point301User = new User();
         point301User.setPoint(301);
         point301User.setName("point301");
         point301User.setPassword("password");
         point301User.setLevel(UserLevel.MVP);
-        session.save(point301User);
-
-        session.flush();
-        session.close();
+        userDao.add(point301User);
     }
-
-    public void deleteAll(Class<?> clazz) {
-        Session session = sessionFactory.openSession();
-        List objects = session.createCriteria(clazz).list();
-        for(Object obj : objects) {
-            session.delete(obj);
-        }
-        session.flush();
-        session.close();
-    }
-
-
 
     @Test
     public void testRent() throws Exception {
-        User point99User = userService.findByName("point99");
+        rent();
+    }
+
+    private Book rent() throws Exception {
+        User point99User = userDao.findByName("point99");
         assertThat(point99User, is(not(nullValue())));
         Book book = bookService.listup().get(0);
 
         userService.rent(point99User.getId(), book.getId());
-        point99User = userService.findByName("point99");
+        point99User = userDao.findByName("point99");
 
-        Session session = sessionFactory.openSession();
-        book = (Book) session.get(Book.class, book.getId());
 
+        book = bookDao.getById(book.getId());
         assertThat(point99User.getPoint(), is(100));
         assertThat(point99User.getLevel(), is(UserLevel.MASTER));
         assertThat(book.getStatus(), is(BookStatus.RENTNOW));
+
+        return book;
     }
 
     @Test
     public void testReturnBook() throws Exception {
-
+        Book rentedBook = rent();
+        User rentUser = rentedBook.getRentUser();
+        userService.returnBook(rentUser.getId(), rentedBook.getId());
+        rentedBook = bookDao.getById(rentedBook.getId());
+        assertThat(rentedBook.getStatus(), is(BookStatus.CANRENT));
+        assertThat(rentedBook.getRentUser(), is(nullValue()));
     }
 
     @Test
