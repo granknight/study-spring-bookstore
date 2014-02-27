@@ -58,6 +58,8 @@ public class JpaConfiguration {
         entityManagerFactoryBean.setJpaVendorAdapter(hibernateJpaVendorAdapter());
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPackagesToScan("me.xyzlast.bh.entities");
+        // NOTE : Properties를 이용해서 Hibernate property를 설정합니다.
+        // entityManagerFactoryBean.setJpaProperties();
         return entityManagerFactoryBean;
     }
 
@@ -67,11 +69,6 @@ public class JpaConfiguration {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(entityManagerFactory().getObject());
         jpaTransactionManager.setDataSource(dataSource());
         return jpaTransactionManager;
-    }
-
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-        return new PersistenceExceptionTranslationPostProcessor();
     }
 
     @Bean

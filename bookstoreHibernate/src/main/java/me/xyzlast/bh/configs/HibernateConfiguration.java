@@ -72,9 +72,4 @@ public class HibernateConfiguration {
         transactionManager.setHibernateManagedSession(false);
         return transactionManager;
     }
-
-    @Bean
-    public HibernateExceptionTranslator hibernateExceptionTranslator() {
-        return new HibernateExceptionTranslator();
-    }
 }
