@@ -1,6 +1,7 @@
 package me.xyzlast.bh.services
 
 import me.xyzlast.bh.configs.HibernateConfiguration
+import me.xyzlast.bh.configs.JpaConfiguration
 import me.xyzlast.bh.constants.BookStatus
 import me.xyzlast.bh.constants.UserLevel
 import me.xyzlast.bh.intefaces.BookDao
@@ -18,7 +19,8 @@ import java.sql.Timestamp
 /**
  * Created by ykyoon on 2/26/14.
  */
-@ContextConfiguration(classes = [ HibernateConfiguration ])
+//@ContextConfiguration(classes = [ HibernateConfiguration ])
+@ContextConfiguration(classes = [ JpaConfiguration ])
 @Transactional
 class UserServiceScenarioTest extends Specification {
     @Autowired

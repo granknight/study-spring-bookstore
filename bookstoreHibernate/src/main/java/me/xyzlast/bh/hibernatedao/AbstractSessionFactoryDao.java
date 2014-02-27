@@ -1,5 +1,6 @@
 package me.xyzlast.bh.hibernatedao;
 
+import me.xyzlast.bh.entities.BaseEntity;
 import me.xyzlast.bh.intefaces.EntityDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Created by ykyoon on 2/26/14.
  */
-public abstract class AbstractSessionFactoryDao<T> implements EntityDao<T> {
+public abstract class AbstractSessionFactoryDao<T extends BaseEntity> implements EntityDao<T> {
 
     @Autowired
     protected SessionFactory sessionFactory;

@@ -11,26 +11,21 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "histories", schema = "", catalog = "bookstore2")
-public class History {
-    private int id;
-    private User user;
-    private Book book;
-    private ActionType actionType;
-    private Timestamp insertDate;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+public class History extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "userId")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "bookId")
+    private Book book;
+    @Basic
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "actionType")
+    private ActionType actionType;
+    @Basic
+    @Column(name = "insertDate")
+    private Timestamp insertDate;
+
     public User getUser() {
         return user;
     }
@@ -39,8 +34,6 @@ public class History {
         this.user = user;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "bookId")
     public Book getBook() {
         return book;
     }
@@ -49,9 +42,6 @@ public class History {
         this.book = book;
     }
 
-    @Basic
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "actionType")
     public ActionType getActionType() {
         return actionType;
     }
@@ -60,8 +50,6 @@ public class History {
         this.actionType = actionType;
     }
 
-    @Basic
-    @Column(name = "insertDate")
     public Timestamp getInsertDate() {
         return insertDate;
     }
@@ -77,7 +65,7 @@ public class History {
 
         History history = (History) o;
 
-        if (id != history.id) return false;
+        if (getId() != history.getId()) return false;
         if (actionType != history.actionType) return false;
         if (book != null ? !book.equals(history.book) : history.book != null) return false;
         if (user != null ? !user.equals(history.user) : history.user != null) return false;
@@ -88,7 +76,7 @@ public class History {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = getId();
         result = 31 * result + user.hashCode();
         result = 31 * result + book.hashCode();
         result = 31 * result + actionType.ordinal();

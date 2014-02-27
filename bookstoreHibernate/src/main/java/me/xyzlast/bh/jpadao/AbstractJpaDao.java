@@ -1,5 +1,6 @@
 package me.xyzlast.bh.jpadao;
 
+import me.xyzlast.bh.entities.BaseEntity;
 import me.xyzlast.bh.intefaces.EntityDao;
 import me.xyzlast.bh.utils.JpaAction;
 import me.xyzlast.bh.utils.JpaExecutor;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by ykyoon on 2/26/14.
  */
-public abstract class AbstractJpaDao<T> implements EntityDao<T> {
+public abstract class AbstractJpaDao<T extends BaseEntity> implements EntityDao<T> {
 
     protected AbstractJpaDao(String entityName) {
         this.entityName = entityName;
@@ -33,6 +34,7 @@ public abstract class AbstractJpaDao<T> implements EntityDao<T> {
 
     @Override
     public void deleteAll() {
+        System.out.println(em);
         em.createQuery("delete from " + entityName).executeUpdate();
     }
 

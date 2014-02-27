@@ -4,6 +4,7 @@ import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 import com.mysema.query.jpa.hibernate.HibernateUpdateClause;
 import com.mysema.query.types.path.EntityPathBase;
+import me.xyzlast.bh.entities.BaseEntity;
 import me.xyzlast.bh.intefaces.EntityDao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by ykyoon on 2/26/14.
  */
-public abstract class AbstractQueryDslDao<T, Q extends EntityPathBase<T>> implements EntityDao<T> {
+public abstract class AbstractQueryDslDao<T extends BaseEntity, Q extends EntityPathBase<T>> implements EntityDao<T> {
 
     @Autowired
     protected SessionFactory sessionFactory;

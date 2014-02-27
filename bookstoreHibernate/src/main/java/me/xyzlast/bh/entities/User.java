@@ -11,27 +11,24 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "users", schema = "", catalog = "bookstore2")
-public class User {
-    private int id;
-    private String name;
-    private String password;
-    private int point;
-    private UserLevel level;
-    private Collection<Book> rentBooks = new ArrayList<>();
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+public class User extends BaseEntity {
     @Basic
     @Column(name = "name")
+    private String name;
+    @Basic
+    @Column(name = "password")
+    private String password;
+    @Basic
+    @Column(name = "point")
+    private int point;
+    @Basic
+    @Enumerated
+    @Column(name = "level")
+    private UserLevel level;
+
+    @OneToMany(mappedBy = "rentUser")
+    private Collection<Book> rentBooks = new ArrayList<>();
+
     public String getName() {
         return name;
     }
@@ -40,8 +37,6 @@ public class User {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -50,8 +45,6 @@ public class User {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "point")
     public int getPoint() {
         return point;
     }
@@ -60,9 +53,6 @@ public class User {
         this.point = point;
     }
 
-    @Basic
-    @Enumerated
-    @Column(name = "level")
     public UserLevel getLevel() {
         return level;
     }
@@ -78,7 +68,7 @@ public class User {
 
         User user = (User) o;
 
-        if (id != user.id) return false;
+        if (getId() != user.getId()) return false;
         if (level != user.level) return false;
         if (point != user.point) return false;
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
@@ -89,7 +79,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = getId();
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + point;
@@ -97,7 +87,7 @@ public class User {
         return result;
     }
 
-    @OneToMany(mappedBy = "rentUser")
+
     public Collection<Book> getRentBooks() {
         return rentBooks;
     }

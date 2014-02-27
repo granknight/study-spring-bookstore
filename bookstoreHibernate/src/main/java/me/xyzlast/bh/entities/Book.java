@@ -10,28 +10,27 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "books", schema = "", catalog = "bookstore2")
-public class Book {
-    private int id;
-    private String name;
-    private String author;
-    private Timestamp publishDate;
-    private String comment;
-    private BookStatus status;
-    private User rentUser;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+public class Book extends BaseEntity {
     @Basic
     @Column(name = "name")
+    private String name;
+    @Basic
+    @Column(name = "author")
+    private String author;
+    @Basic
+    @Column(name = "publishDate")
+    private Timestamp publishDate;
+    @Basic
+    @Column(name = "comment")
+    private String comment;
+    @Basic
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private BookStatus status;
+    @ManyToOne
+    @JoinColumn(name = "rentUserId", referencedColumnName = "id")
+    private User rentUser;
+
     public String getName() {
         return name;
     }
@@ -40,8 +39,6 @@ public class Book {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "author")
     public String getAuthor() {
         return author;
     }
@@ -50,8 +47,6 @@ public class Book {
         this.author = author;
     }
 
-    @Basic
-    @Column(name = "publishDate")
     public Timestamp getPublishDate() {
         return publishDate;
     }
@@ -60,8 +55,6 @@ public class Book {
         this.publishDate = publishDate;
     }
 
-    @Basic
-    @Column(name = "comment")
     public String getComment() {
         return comment;
     }
@@ -70,9 +63,6 @@ public class Book {
         this.comment = comment;
     }
 
-    @Basic
-    @Column(name = "status")
-    @Enumerated(EnumType.ORDINAL)
     public BookStatus getStatus() {
         return status;
     }
@@ -88,7 +78,7 @@ public class Book {
 
         Book book = (Book) o;
 
-        if (id != book.id) return false;
+        if (getId() != book.getId()) return false;
         if (status != book.status) return false;
         if (author != null ? !author.equals(book.author) : book.author != null) return false;
         if (comment != null ? !comment.equals(book.comment) : book.comment != null) return false;
@@ -100,7 +90,7 @@ public class Book {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = getId();
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
@@ -109,8 +99,6 @@ public class Book {
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "rentUserId", referencedColumnName = "id")
     public User getRentUser() {
         return rentUser;
     }
