@@ -19,11 +19,6 @@ public class BookDaoImpl extends AbstractJpaDao<Book> implements BookDao {
 
     @Override
     public List<Book> listByStatus() {
-        return (List<Book>) executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                return em.createQuery("from Book order by status").getResultList();
-            }
-        });
+        return em.createQuery("from Book order by status").getResultList();
     }
 }

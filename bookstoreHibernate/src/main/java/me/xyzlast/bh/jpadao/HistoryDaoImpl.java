@@ -20,13 +20,8 @@ public class HistoryDaoImpl extends AbstractJpaDao<History> implements HistoryDa
 
     @Override
     public List<History> listByUser(final int userId) {
-        return (List<History>) executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                Query query = em.createQuery("from History where user.id = :userId");
-                query.setParameter("userId", userId);
-                return query.getResultList();
-            }
-        });
+        Query query = em.createQuery("from History where user.id = :userId");
+        query.setParameter("userId", userId);
+        return query.getResultList();
     }
 }

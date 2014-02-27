@@ -6,6 +6,7 @@ import me.xyzlast.bh.utils.JpaExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -18,69 +19,42 @@ public abstract class AbstractJpaDao<T> implements EntityDao<T> {
         this.entityName = entityName;
     }
 
+    @PersistenceContext
+    protected EntityManager em;
+
     @Autowired
     protected JpaExecutor executor;
     protected final String entityName;
 
     @Override
     public List<T> getAll() {
-        return (List<T>) executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                return em.createQuery("from " + entityName).getResultList();
-            }
-        });
+        return em.createQuery("from " + entityName).getResultList();
     }
 
     @Override
     public void deleteAll() {
-        executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                return em.createQuery("delete from " + entityName).executeUpdate();
-            }
-        });
+        em.createQuery("delete from " + entityName).executeUpdate();
     }
 
     @Override
     public T getById(final int id) {
-        return (T) executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                Query query = em.createQuery("from " + entityName + " where id = :id");
-                query.setParameter("id", id);
-                return query.getSingleResult();
-            }
-        });
+        Query query = em.createQuery("from " + entityName + " where id = :id");
+        query.setParameter("id", id);
+        return (T) query.getSingleResult();
     }
 
     @Override
     public void add(final T entity) {
-        executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                return em.merge(entity);
-            }
-        });
+        em.merge(entity);
     }
 
     @Override
     public void update(final T entity) {
-        executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                return em.merge(entity);
-            }
-        });
+        em.merge(entity);
     }
 
     @Override
     public int countAll() {
-        return (int) executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                return em.createQuery("from " + entityName).getResultList().size();
-            }
-        });
+        return em.createQuery("from " + entityName).getResultList().size();
     }
 }
