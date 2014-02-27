@@ -19,13 +19,8 @@ public class UserDaoImpl extends AbstractJpaDao<User> implements UserDao {
 
     @Override
     public User findByName(final String name) {
-        return (User) executor.execute(new JpaAction() {
-            @Override
-            public Object execute(EntityManager em) {
-                Query query = em.createQuery("from User where name = :name");
-                query.setParameter("name", name);
-                return query.getSingleResult();
-            }
-        });
+        Query query = em.createQuery("from User where name = :name");
+        query.setParameter("name", name);
+        return (User) query.getSingleResult();
     }
 }
