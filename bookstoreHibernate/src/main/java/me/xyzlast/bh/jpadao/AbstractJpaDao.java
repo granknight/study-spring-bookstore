@@ -6,7 +6,6 @@ import me.xyzlast.bh.utils.JpaExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -77,6 +76,11 @@ public abstract class AbstractJpaDao<T> implements EntityDao<T> {
 
     @Override
     public int countAll() {
-        return 0;
+        return (int) executor.execute(new JpaAction() {
+            @Override
+            public Object execute(EntityManager em) {
+                return em.createQuery("from " + entityName).getResultList().size();
+            }
+        });
     }
 }
