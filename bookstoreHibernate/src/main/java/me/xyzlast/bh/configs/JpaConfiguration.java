@@ -6,6 +6,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaDialect;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -27,8 +28,10 @@ import java.io.IOException;
         @PropertySource("classpath:connection.properties")
 })
 //@ComponentScan(basePackages = { "me.xyzlast.bh.services", "me.xyzlast.bh.hibernatedao" })
-@ComponentScan(basePackages = { "me.xyzlast.bh.services", "me.xyzlast.bh.jpadao", "me.xyzlast.bh.utils" })
+//@ComponentScan(basePackages = { "me.xyzlast.bh.services", "me.xyzlast.bh.jpadao", "me.xyzlast.bh.utils" })
+@ComponentScan(basePackages = { "me.xyzlast.bh.services", "me.xyzlast.bh.springdata" })
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "me.xyzlast.bh.springdata")
 public class JpaConfiguration {
 
     @Autowired

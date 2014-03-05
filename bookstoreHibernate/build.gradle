@@ -12,6 +12,7 @@ dependencies {
     compile("com.mysema.querydsl:querydsl-apt:$queryDSL") {
         exclude group: 'com.google.guava'
     }
+    compile 'org.springframework.data:spring-data-jpa:1.5.0.RELEASE'
 }
 
 sourceSets {
