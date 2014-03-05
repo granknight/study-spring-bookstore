@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.xyzlast.mybatis.dao.HistoryDao">
+    <resultMap id="historymap" type="me.xyzlast.mybatis.entities.History">
+        <id column="id" property="id"/>
+        <result column="bookId" property="bookId"/>
+        <result column="userId" property="userId"/>
+        <result column="actionType" property="actionType"/>
+        <result column="insertDate" property="insertDate"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="historymap">
+      SELECT id, bookId, userId, actionType, insertDate level FROM histories
+    </select>
+    <select id="countAll" resultType="int">SELECT COUNT(*) FROM histories</select>
+    <select id="listByUser" parameterType="int" resultMap="historymap">
+        SELECT id, bookId, userId, actionType, insertDate level FROM histories where userId = #{value}
+    </select>
+    <insert id="add" parameterType="me.xyzlast.mybatis.entities.History" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO histories(bookId, userId, actionType, insertDate) VALUES(#{bookId}, #{userId}, #{level.ordinal}, #{insertDate})
+    </insert>
+    <update id="update" parameterType="me.xyzlast.mybatis.entities.History">
+        UPDATE histories SET bookId=#{bookId}, userId=#{userId}, actionType=#{actionType.ordinal}, insertDate=#{insertDate} WHERE id = #{id}
+    </update>
+    <delete id="deleteAll">
+        DELETE FROM histories
+    </delete>
+</mapper>

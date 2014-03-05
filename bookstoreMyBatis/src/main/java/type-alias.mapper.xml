@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.apache.ibatis.submitted.rounding.Mapper">
+    <resultMap type="me.xyzlast.mybatis.entities.Book" id="bookmap">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="author" property="author"/>
+        <result column="publishDate" property="publishDate"/>
+        <result column="status" property="status"/>
+        <result column="comment" property="comment"/>
+    </resultMap>
+</mapper>

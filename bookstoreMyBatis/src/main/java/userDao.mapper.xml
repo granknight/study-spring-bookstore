@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.xyzlast.mybatis.dao.UserDao">
+    <resultMap id="usermap" type="me.xyzlast.mybatis.entities.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="password" property="password"/>
+        <result column="point" property="point"/>
+        <result column="level" property="level"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="usermap">
+      SELECT id, name, password, point, level FROM users
+    </select>
+    <select id="findByName" resultMap="usermap" parameterType="String">
+      SELECT id, name, password, point, level FROM users where name = #{value}
+    </select>
+    <select id="countAll" resultType="int">SELECT COUNT(*) FROM users</select>
+    <insert id="add" parameterType="me.xyzlast.mybatis.entities.User" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO users(name, password, point, level) VALUES(#{name}, #{password}, #{point}, #{level.ordinal})
+    </insert>
+    <update id="update" parameterType="me.xyzlast.mybatis.entities.User">
+        UPDATE users SET name=#{name}, password=#{password}, point=#{point}, level=#{level.ordinal} WHERE id = #{id}
+    </update>
+    <delete id="deleteAll">
+        DELETE FROM users
+    </delete>
+</mapper>
