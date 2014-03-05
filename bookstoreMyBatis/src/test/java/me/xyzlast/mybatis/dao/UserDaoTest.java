@@ -5,6 +5,7 @@ import static org.hamcrest.core.IsNull.*;
 import static org.hamcrest.core.IsNot.*;
 import static org.junit.Assert.*;
 
+import me.xyzlast.mybatis.configs.MyBatisConfiguration;
 import me.xyzlast.mybatis.constants.BookStatus;
 import me.xyzlast.mybatis.entities.Book;
 import me.xyzlast.mybatis.entities.User;
@@ -19,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
@@ -33,27 +35,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-//@SuppressWarnings("unused")
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration("classpath:applicationContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = MyBatisConfiguration.class)
+@Transactional
 public class UserDaoTest {
-    private SqlSessionFactory sessionFactory;
-
-    @Before
-    public void setUp() throws Exception {
-        String resource = "mybatis-config.xml";
-        InputStream is = Resources.getResourceAsStream(resource);
-        sessionFactory = new SqlSessionFactoryBuilder().build(is);
-        is.close();
-        assertThat(sessionFactory, is(not(nullValue())));
-    }
+    @Autowired
+    private UserDao userDao;
 
     @Test
     public void getAll() {
-        SqlSession session = sessionFactory.openSession();
-        UserDao userDao = session.getMapper(UserDao.class);
         List<User> users = userDao.getAll();
-
         for(User user : users) {
             System.out.println(user);
         }
@@ -61,8 +52,6 @@ public class UserDaoTest {
 
     @Test
     public void getUserByName() {
-        SqlSession session = sessionFactory.openSession();
-        UserDao userDao = session.getMapper(UserDao.class);
         User user = userDao.findByName("point99");
         System.out.println(user);
     }

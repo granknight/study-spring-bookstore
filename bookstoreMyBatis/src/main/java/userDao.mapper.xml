@@ -11,6 +11,9 @@
         <result column="level" property="level"/>
     </resultMap>
 
+    <select id="getById" resultMap="usermap" parameterType="int">
+      SELECT id, name, password, point, level FROM users WHERE id = #{value}
+    </select>
     <select id="getAll" resultMap="usermap">
       SELECT id, name, password, point, level FROM users
     </select>

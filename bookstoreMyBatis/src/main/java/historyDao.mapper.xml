@@ -12,14 +12,17 @@
     </resultMap>
 
     <select id="getAll" resultMap="historymap">
-      SELECT id, bookId, userId, actionType, insertDate level FROM histories
+      SELECT id, bookId, userId, actionType, insertDate FROM histories
+    </select>
+    <select id="getById" resultMap="historymap" parameterType="int" useCache="false">
+        SELECT id, bookId, userId, actionType, insertDate level FROM histories WHERE id = #{id}
     </select>
     <select id="countAll" resultType="int">SELECT COUNT(*) FROM histories</select>
     <select id="listByUser" parameterType="int" resultMap="historymap">
         SELECT id, bookId, userId, actionType, insertDate level FROM histories where userId = #{value}
     </select>
     <insert id="add" parameterType="me.xyzlast.mybatis.entities.History" useGeneratedKeys="true" keyColumn="id">
-        INSERT INTO histories(bookId, userId, actionType, insertDate) VALUES(#{bookId}, #{userId}, #{level.ordinal}, #{insertDate})
+        INSERT INTO histories(bookId, userId, actionType, insertDate) VALUES(#{bookId}, #{userId}, #{actionType.ordinal}, #{insertDate})
     </insert>
     <update id="update" parameterType="me.xyzlast.mybatis.entities.History">
         UPDATE histories SET bookId=#{bookId}, userId=#{userId}, actionType=#{actionType.ordinal}, insertDate=#{insertDate} WHERE id = #{id}

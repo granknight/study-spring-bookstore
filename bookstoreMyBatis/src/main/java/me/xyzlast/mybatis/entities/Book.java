@@ -67,11 +67,11 @@ public class Book extends BaseEntity {
         this.status = status;
     }
 
-    public Integer getRentUser() {
+    public Integer getRentUserId() {
         return rentUserId;
     }
 
-    public void setRentUser(Integer usersByRentUserId) {
+    public void setRentUserId(Integer usersByRentUserId) {
         this.rentUserId = usersByRentUserId;
     }
 }

@@ -11,6 +11,9 @@
         <result column="status" property="status"/>
         <result column="comment" property="comment"/>
     </resultMap>
+    <select id="getById" resultMap="bookmap" parameterType="int">
+        SELECT id, name, author, publishDate, status FROM books WHERE id = #{value}
+    </select>
     <select id="getAll" resultMap="bookmap">
       SELECT id, name, author, publishDate, status FROM books
     </select>

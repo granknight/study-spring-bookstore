@@ -8,23 +8,9 @@
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="me.xyzlast.mybatis.constants.ActionType"/>
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="me.xyzlast.mybatis.constants.UserLevel"/>
     </typeHandlers>
-
-    <environments default="development">
-        <environment id="development">
-            <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost/bookstore2"/>
-                <property name="username" value="root"/>
-                <property name="password" value="qwer12#$"/>
-            </dataSource>
-        </environment>
-    </environments>
     <mappers>
         <mapper resource="bookDao.mapper.xml"/>
         <mapper resource="userDao.mapper.xml"/>
         <mapper resource="historyDao.mapper.xml"/>
-        <!--<mapper resource="type-alias.mapper.xml"/>-->
-        <!--<mapper class="me.xyzlast.mybatis.dao.BookDao"/>-->
     </mappers>
 </configuration>
