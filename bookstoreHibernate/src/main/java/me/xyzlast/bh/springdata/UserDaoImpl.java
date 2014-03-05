@@ -1,5 +1,6 @@
 package me.xyzlast.bh.springdata;
 
+import me.xyzlast.bh.entities.QUser;
 import me.xyzlast.bh.entities.User;
 import me.xyzlast.bh.intefaces.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class UserDaoImpl extends AbstractSpringDataDao<User> implements UserDao 
 
     @Override
     public User findByName(String name) {
-        return userRepository.findByName(name);
+        return userRepository.findOne(QUser.user.name.eq(name));
+//        return userRepository.findByName(name);
     }
 }
