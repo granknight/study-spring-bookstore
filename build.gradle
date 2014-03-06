@@ -1,5 +1,19 @@
 apply plugin: 'base'
 
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url 'http://repo.springsource.org/plugins-release' }
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.0'
+        classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.4'
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.5'
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'eclipse'
@@ -7,6 +21,10 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'groovy'
     apply plugin: 'pmd'
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
 
     repositories {
         mavenCentral()

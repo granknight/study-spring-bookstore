@@ -17,4 +17,4 @@ include 'services:webservice'
 */
 
 rootProject.name = 'bookstore'
-include 'bookstore01', 'bookstoreMyBatis', 'bookstoreHibernate'
+include 'bookstore01', 'bookstoreMyBatis', 'bookstoreHibernate', 'bookstoreWebApp'

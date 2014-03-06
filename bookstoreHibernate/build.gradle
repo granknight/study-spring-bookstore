@@ -9,7 +9,7 @@ dependencies {
     compile("com.mysema.querydsl:querydsl-core:$queryDSL")
     compile("com.mysema.querydsl:querydsl-jpa:$queryDSL")
     compile("com.mysema.querydsl:querydsl-sql:$queryDSL")
-    compile("com.mysema.querydsl:querydsl-apt:$queryDSL") {
+    provided("com.mysema.querydsl:querydsl-apt:$queryDSL") {
         exclude group: 'com.google.guava'
     }
     compile 'org.springframework.data:spring-data-jpa:1.5.0.RELEASE'
@@ -25,8 +25,7 @@ sourceSets {
 
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
     source = sourceSets.main.java
-    //classpath = configurations.compile + configurations.provided
-    classpath = configurations.compile
+    classpath = configurations.compile + configurations.provided
     options.compilerArgs = [
             "-proc:only",
             "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
