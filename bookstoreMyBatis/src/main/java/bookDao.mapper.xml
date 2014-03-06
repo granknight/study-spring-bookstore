@@ -10,15 +10,16 @@
         <result column="publishDate" property="publishDate"/>
         <result column="status" property="status"/>
         <result column="comment" property="comment"/>
+        <result column="rentUserId" property="rentUserId"/>
     </resultMap>
     <select id="getById" resultMap="bookmap" parameterType="int">
-        SELECT id, name, author, publishDate, status FROM books WHERE id = #{value}
+        SELECT id, name, author, publishDate, status, rentUserId FROM books WHERE id = #{value}
     </select>
     <select id="getAll" resultMap="bookmap">
-      SELECT id, name, author, publishDate, status FROM books
+      SELECT id, name, author, publishDate, status, rentUserId FROM books
     </select>
     <select id="listByStatus" resultMap="bookmap">
-      SELECT id, name, author, publishDate, status FROM books Order By Status
+      SELECT id, name, author, publishDate, status, rentUserId FROM books Order By Status
     </select>
     <select id="countAll" resultType="int">SELECT COUNT(*) FROM books</select>
     <insert id="add" parameterType="me.xyzlast.mybatis.entities.Book" useGeneratedKeys="true" keyColumn="id">
