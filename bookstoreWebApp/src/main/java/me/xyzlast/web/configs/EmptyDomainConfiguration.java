@@ -1,5 +1,7 @@
 package me.xyzlast.web.configs;
 
+import me.xyzlast.web.domain.Hello;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -7,5 +9,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class EmptyDomainConfiguration {
-
+    @Bean
+    public Hello getHello() {
+        return new Hello();
+    }
 }

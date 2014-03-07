@@ -2,6 +2,7 @@ package me.xyzlast.web.configs;
 
 import me.xyzlast.web.controllers.MainController;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -13,6 +14,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc
+@ComponentScan(basePackages = {
+        "me.xyzlast.web.controllers"
+})
 public class ControllerConfiguration {
 
     @Bean
@@ -24,10 +28,4 @@ public class ControllerConfiguration {
 
         return internalResourceViewResolver;
     }
-
-//    @Bean(name = "/main")
-//    public Controller mainController() {
-//        return new MainController();
-//    }
-
 }

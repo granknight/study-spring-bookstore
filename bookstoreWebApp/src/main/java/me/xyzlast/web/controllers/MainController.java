@@ -1,6 +1,7 @@
 package me.xyzlast.web.controllers;
 
 import me.xyzlast.web.domain.Hello;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class MainController {
-
+    @Autowired
     private Hello hello;
 
     public Hello getHello() {
