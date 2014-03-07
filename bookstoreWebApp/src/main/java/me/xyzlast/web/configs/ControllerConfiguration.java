@@ -25,9 +25,9 @@ public class ControllerConfiguration {
         return internalResourceViewResolver;
     }
 
-    @Bean(name = "/main")
-    public Controller mainController() {
-        return new MainController();
-    }
+//    @Bean(name = "/main")
+//    public Controller mainController() {
+//        return new MainController();
+//    }
 
 }

@@ -1,8 +1,9 @@
 package me.xyzlast.web.controllers;
 
 import me.xyzlast.web.domain.Hello;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by ykyoon on 3/6/14.
  */
-public class MainController implements Controller {
+@Controller
+public class MainController {
 
     private Hello hello;
 
@@ -22,9 +24,8 @@ public class MainController implements Controller {
         this.hello = hello;
     }
 
-    @Override
+    @RequestMapping(value = "/main/index")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
         String name = request.getParameter("name");
         String result = hello.sayHello(name);
         ModelAndView mv = new ModelAndView();
