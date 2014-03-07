@@ -18,9 +18,14 @@ dependencies {
     providedCompile 'javax.websocket:javax.websocket-api:1.0'
     providedCompile 'javax.servlet:jsp-api:2.0'
     providedCompile "org.apache.tomcat:tomcat-servlet-api:${tomcatVersion}"
+
+    def springVersion = "4.0.1.RELEASE"
+    compile "org.springframework:spring-webmvc:${springVersion}"
 }
 
 tomcatRun {
+    contextPath = ""
+    URIEncoding = 'UTF-8'
     dependsOn war
 }
 
