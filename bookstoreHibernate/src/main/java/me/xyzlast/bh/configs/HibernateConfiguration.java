@@ -32,8 +32,7 @@ public class HibernateConfiguration {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() throws IOException {
-        PropertySourcesPlaceholderConfigurer configHolder = new PropertySourcesPlaceholderConfigurer();
-        return configHolder;
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
     @Bean

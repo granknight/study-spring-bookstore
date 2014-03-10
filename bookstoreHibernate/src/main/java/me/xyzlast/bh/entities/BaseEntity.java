@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 /**
  * Created by ykyoon on 2/27/14.
+ * Base Entity Object.
  */
 @MappedSuperclass
 public class BaseEntity {

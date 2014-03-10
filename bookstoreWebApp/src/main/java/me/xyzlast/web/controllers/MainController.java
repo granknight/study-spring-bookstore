@@ -3,6 +3,7 @@ package me.xyzlast.web.controllers;
 import me.xyzlast.web.domain.Hello;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,12 +27,21 @@ public class MainController {
     }
 
     @RequestMapping(value = "/main/index")
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String name = request.getParameter("name");
+    public String getIndex(String name, Model model) {
+        if(name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("name is empty");
+        }
         String result = hello.sayHello(name);
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("result", result);
-        mv.setViewName("index");
-        return mv;
+        model.addAttribute("result", result);
+        return "index";
     }
+
+//    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        String name = request.getParameter("name");
+//        String result = hello.sayHello(name);
+//        ModelAndView mv = new ModelAndView();
+//        mv.addObject("result", result);
+//        mv.setViewName("index");
+//        return mv;
+//    }
 }
