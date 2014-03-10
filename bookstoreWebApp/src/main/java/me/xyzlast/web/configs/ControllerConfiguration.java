@@ -8,6 +8,8 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 /**
  * Created by ykyoon on 3/7/14.
@@ -27,5 +29,20 @@ public class ControllerConfiguration {
         internalResourceViewResolver.setOrder(2);
 
         return internalResourceViewResolver;
+    }
+
+    @Bean
+    public TilesConfigurer tilesConfigurer() {
+        TilesConfigurer tilesConfigurer = new TilesConfigurer();
+        tilesConfigurer.setDefinitions("/WEB-INF/tiles-config.xml");
+        tilesConfigurer.setCheckRefresh(true);
+        return tilesConfigurer;
+    }
+
+    @Bean
+    public TilesViewResolver tilesViewResolver() {
+        TilesViewResolver viewResolver = new TilesViewResolver();
+        viewResolver.setOrder(1);
+        return viewResolver;
     }
 }

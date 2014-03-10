@@ -1,5 +1,6 @@
 package me.xyzlast.web.configs;
 
+import me.xyzlast.bh.configs.JpaConfiguration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -12,7 +13,7 @@ import javax.servlet.Filter;
 public class WebXmlInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] { EmptyDomainConfiguration.class };
+        return new Class<?>[] {EmptyDomainConfiguration.class, JpaConfiguration.class};
     }
 
     @Override
