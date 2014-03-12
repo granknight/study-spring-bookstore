@@ -36,6 +36,19 @@ dependencies {
     compile project(':bookstoreHibernate')
 }
 
+import org.apache.tools.ant.taskdefs.condition.Os
+task bowerInstaller(type:Exec) {
+    if(Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', 'bower-installer'
+    } else {
+        commandLine 'bower-installer'
+    }
+}
+
+war {
+    dependsOn bowerInstaller
+}
+
 tomcatRun {
     contextPath = ""
     URIEncoding = 'UTF-8'
