@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +28,14 @@ public class MainController {
     }
 
     @RequestMapping(value = "/main/index")
-    public String getIndex(String name, Model model) {
+    public void getIndex(@RequestParam(value = "name1", defaultValue = "ABC", required = true) String name,
+                           Model model) {
         if(name == null || name.isEmpty()) {
             throw new IllegalArgumentException("name is empty");
         }
         String result = hello.sayHello(name);
         model.addAttribute("result", result);
-        return "index";
+//        return "index";
     }
 
 //    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
