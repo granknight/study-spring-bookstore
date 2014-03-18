@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+@args List<me.xyzlast.bh.entities.Book> books
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title></title>
+</head>
+<body>
+  @for(me.xyzlast.bh.entities.Book book : books) {
+    @book.getName() <br/>
+    @if(book.getRentUser() == null) {
+      <p>빌린 사람이 없어요.</p>
+    }
+  }
+</body>
+</html>

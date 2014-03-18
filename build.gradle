@@ -29,6 +29,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "http://192.168.13.209:8080/nexus/content/repositories/releases" }
     }
 
     dependencies {
