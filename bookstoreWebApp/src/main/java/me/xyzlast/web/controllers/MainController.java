@@ -28,22 +28,13 @@ public class MainController {
     }
 
     @RequestMapping(value = "/main/index")
-    public void getIndex(@RequestParam(value = "name1", defaultValue = "ABC", required = true) String name,
-                           Model model) {
+    public String getIndex(@RequestParam(value = "name1", defaultValue = "ABC", required = true) String name, Model model) {
         if(name == null || name.isEmpty()) {
             throw new IllegalArgumentException("name is empty");
         }
         String result = hello.sayHello(name);
         model.addAttribute("result", result);
-//        return "index";
+        return "index";
     }
 
-//    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//        String name = request.getParameter("name");
-//        String result = hello.sayHello(name);
-//        ModelAndView mv = new ModelAndView();
-//        mv.addObject("result", result);
-//        mv.setViewName("index");
-//        return mv;
-//    }
 }

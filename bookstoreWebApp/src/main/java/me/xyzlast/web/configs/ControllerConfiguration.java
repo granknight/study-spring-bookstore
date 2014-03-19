@@ -7,9 +7,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
@@ -25,9 +32,13 @@ import java.util.Properties;
 @ComponentScan(basePackages = {
         "me.xyzlast.web.controllers"
 })
-public class ControllerConfiguration {
-
-//    @Bean
+public class ControllerConfiguration extends WebMvcConfigurerAdapter {
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/lib/**").addResourceLocations("/lib/**");
+        super.addResourceHandlers(registry);
+    }
+    //    @Bean
 //    public ViewResolver internalResourceViewResolver() {
 //        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
 //        internalResourceViewResolver.setPrefix("/WEB-INF/jsp/");
@@ -54,11 +65,7 @@ public class ControllerConfiguration {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() throws IOException {
-        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
-        Properties properties = new Properties();
-        properties.put("file.encoding", "UTF-8");
-        configurer.setProperties(properties);
-        return configurer;
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
 
@@ -77,10 +84,33 @@ public class ControllerConfiguration {
         rythmViewResolver.setContentType("text/html;charset=UTF-8");
         rythmViewResolver.setPrefix("/WEB-INF/rythm/");
         rythmViewResolver.setSuffix(".html");
-
-//        Properties properties = new Properties();
-//        properties.put("file.encoding", "UTF-8");
-
         return rythmViewResolver;
+    }
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        return localeChangeInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
+        super.addInterceptors(registry);
+    }
+
+    @Bean
+    public AcceptHeaderLocaleResolver acceptHeaderLocaleResolver() {
+        return new AcceptHeaderLocaleResolver();
+    }
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasename("classpath:messages");
+        messageSource.setFallbackToSystemLocale(false);
+        return messageSource;
     }
 }

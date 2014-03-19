@@ -1,10 +1,14 @@
 package me.xyzlast.web.configs;
 
 import me.xyzlast.bh.configs.JpaConfiguration;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
 
 /**
 * Created by ykyoon on 3/7/14.

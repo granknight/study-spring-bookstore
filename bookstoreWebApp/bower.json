@@ -12,11 +12,13 @@
             "eot" : "src/main/webapp/lib/fonts",
             "svg" : "src/main/webapp/lib/fonts",
             "ttf" : "src/main/webapp/lib/fonts",
-            "woff" : "src/main/webapp/lib/fonts"
+            "woff" : "src/main/webapp/lib/fonts",
+            "map" : "src/main/webapp/lib/js"
         },
         "sources" : {
             "jquery" : [
-                    "bower_components/jquery/dist/jquery.min.js"
+                    "bower_components/jquery/dist/jquery.min.js",
+                    "bower_components/jquery/dist/jquery.min.map"
                 ],
             "bootstrap" : [
                     "bower_components/bootstrap/dist/css/bootstrap.min.css",

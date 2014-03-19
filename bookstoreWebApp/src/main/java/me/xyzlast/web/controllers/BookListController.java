@@ -14,7 +14,7 @@ public class BookListController {
     @Autowired
     private BookService bookService;
 
-    @RequestMapping(value = "books/list")
+    @RequestMapping(value = "/tiles/books/list")
     public String getBookList(Model model) {
         model.addAttribute("books", bookService.listup());
         return "tiles/books";

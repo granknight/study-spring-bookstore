@@ -54,14 +54,14 @@ subprojects {
         testCompile "org.spockframework:spock-spring:1.0-groovy-2.0-SNAPSHOT"
     }
 
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     eclipse {
         jdt {
-            sourceCompatibility = 1.7
-            targetCompatibility = 1.7
+            sourceCompatibility = 1.8
+            targetCompatibility = 1.8
         }
     }
 }

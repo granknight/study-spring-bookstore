@@ -1,16 +1,29 @@
-<!DOCTYPE html>
+@extends("layout.html")
 @args List<me.xyzlast.bh.entities.Book> books
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title></title>
-</head>
-<body>
-  @for(me.xyzlast.bh.entities.Book book : books) {
-    @book.getName() <br/>
-    @if(book.getRentUser() == null) {
-      <p>빌린 사람이 없어요.</p>
-    }
-  }
-</body>
-</html>
+@section("title") {
+  책리스트입니다.
+}
+@section("content") {
+  @message("label.welcome") <br/>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <td>책제목</td>
+        <td>빌린 사람</td>
+      </tr>
+      @for(me.xyzlast.bh.entities.Book book : books) {
+        <tr>
+          <td>@book.getName()</td>
+          <td>
+            @if(book.getRentUser() == null) {
+              빌린 사람이 없어요.
+            } else {
+              빌린 사람이 있어요.
+            }
+          </td>
+        </tr>
+      }
+    </thead>
+  </table>
+
+}
