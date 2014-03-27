@@ -1,8 +1,7 @@
 package me.xyzlast.mybatis.dao;
 
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.core.IsNull.*;
-import static org.hamcrest.core.IsNot.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 import static org.junit.Assert.*;
 
 import me.xyzlast.mybatis.configs.MyBatisConfiguration;

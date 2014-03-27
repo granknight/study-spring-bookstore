@@ -3,10 +3,7 @@ package me.xyzlast.mybatis.services;
 /**
  * Created by ykyoon on 3/5/14.
  */
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.*;
-import static org.hamcrest.core.IsNot.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import me.xyzlast.mybatis.configs.MyBatisConfiguration;
@@ -132,9 +129,9 @@ public class UserServiceImplTest {
     @Test
     public void testListup() throws Exception {
         List<User> listup = userService.listup();
-        for(User user : listup) {
-            System.out.println(user);
-        }
+        listup.forEach(u ->
+            System.out.println(u.getName())
+        );
     }
 
     @Test

@@ -7,16 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Created by ykyoon on 3/10/14.
+ * Created by ykyoon on 14. 3. 26.
+ * Velocity를 이용한 Book List
  */
 @Controller
-public class BookListController {
+public class VelocityBookListController {
+
     @Autowired
     private BookService bookService;
 
-    @RequestMapping(value = "/tiles/books/list")
+    @RequestMapping(value = "velocity/book/list")
     public String getBookList(Model model) {
         model.addAttribute("books", bookService.listup());
-        return "tiles/books";
+        return "vm-books";
     }
 }

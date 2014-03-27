@@ -6,19 +6,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Locale;
-
 /**
- * Created by ykyoon on 3/18/14.
+ * Created by ykyoon on 14. 3. 26.
+ * Freemarker example
  */
 @Controller
-public class RythmBookListController {
+public class FreemarkerBookListController {
     @Autowired
     private BookService bookService;
 
-    @RequestMapping(value = "rythm/book/list")
+    @RequestMapping(value = "fm/book/list")
     public String getBookList(Model model) {
         model.addAttribute("books", bookService.listup());
-        return "rythm-books";
+        return "fm-books";
     }
 }

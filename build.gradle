@@ -1,31 +1,28 @@
 apply plugin: 'base'
 
+// spring prop plugin 추가
 buildscript {
     repositories {
-        mavenCentral()
-        jcenter()
         maven { url 'http://repo.springsource.org/plugins-release' }
     }
-
     dependencies {
-        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.0'
-        classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.4'
         classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.5'
     }
 }
 
 subprojects {
+    // Plugin 설정, 만약에 code에 대한 static analysis가 필요한 경우에 이곳에 설정.
     apply plugin: 'java'
     apply plugin: 'eclipse'
     apply plugin: 'eclipse-wtp'
     apply plugin: 'idea'
     apply plugin: 'groovy'
-    apply plugin: 'pmd'
     apply plugin: 'propdeps'
     apply plugin: 'propdeps-maven'
     apply plugin: 'propdeps-idea'
     apply plugin: 'propdeps-eclipse'
 
+    // 기본적으로 사용할 repository들을 정의
     repositories {
         mavenCentral()
         maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
@@ -39,6 +36,8 @@ subprojects {
         compile "org.springframework:spring-context:${springVersion}"
         compile "org.springframework:spring-aspects:${springVersion}"
         compile "org.springframework:spring-jdbc:${springVersion}"
+        compile "org.springframework:spring-context-support:${springVersion}"
+
         compile 'mysql:mysql-connector-java:5.1.27'
         compile 'com.jolbox:bonecp:0.8.0.RELEASE'
         compile 'com.google.guava:guava:15.0'
@@ -54,15 +53,11 @@ subprojects {
         testCompile "org.spockframework:spock-spring:1.0-groovy-2.0-SNAPSHOT"
     }
 
+    // source, target compiler version 결정
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
-    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-    eclipse {
-        jdt {
-            sourceCompatibility = 1.8
-            targetCompatibility = 1.8
-        }
-    }
+    // source code encoding
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 }
 

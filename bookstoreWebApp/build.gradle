@@ -2,22 +2,38 @@ apply plugin: 'war'
 apply plugin: 'tomcat'
 apply plugin: 'cargo'
 
+// tomcat과 cargo plugin에 대한 repository 설정입니다.
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.0'
+        classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.4'
+    }
+}
+
+
 dependencies {
+    // tomcat plugin 설정입니다.
     String tomcatVersion = '7.0.47'
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
     tomcat "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
     tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
         exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
     }
-
-    def cargoVersion = '1.4.5'
-    cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
-            "org.codehaus.cargo:cargo-ant:$cargoVersion"
-
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     providedCompile 'javax.websocket:javax.websocket-api:1.0'
     providedCompile 'javax.servlet:jsp-api:2.0'
     providedCompile "org.apache.tomcat:tomcat-servlet-api:${tomcatVersion}"
+
+    // cargo에 대한 설정입니다.
+    def cargoVersion = '1.4.5'
+    cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+            "org.codehaus.cargo:cargo-ant:$cargoVersion"
+
 
     def springVersion = "4.0.1.RELEASE"
     compile "org.springframework:spring-webmvc:${springVersion}"
@@ -36,19 +52,7 @@ dependencies {
     compile project(':bookstoreHibernate')
 }
 
-import org.apache.tools.ant.taskdefs.condition.Os
-task bowerInstaller(type:Exec) {
-    if(Os.isFamily(Os.FAMILY_WINDOWS)) {
-        commandLine 'cmd', 'bower-installer'
-    } else {
-        commandLine 'bower-installer'
-    }
-}
-
-war {
-    dependsOn bowerInstaller
-}
-
+// tomcarRun을 실행시키기 위해서 war에 대한 dependency를 주입합니다.
 tomcatRun {
     contextPath = ""
     URIEncoding = 'UTF-8'
@@ -59,6 +63,7 @@ tomcatRunWar {
     dependsOn war
 }
 
+// cargo를 이용한 배포를 위해서 war에 대한 dependency를 주입합니다.
 cargoRedeployRemote {
     dependsOn war
 }
@@ -75,9 +80,49 @@ cargo {
         context = "${project.name}"
     }
 
+    // remoteDeploy 되는 target의 tomcat 정보
     remote {
         hostname = '192.168.13.209'
         username = 'ykyoon'
         password = 'qwer12#$'
     }
+}
+
+import org.apache.tools.ant.taskdefs.condition.Os
+import groovy.json.JsonSlurper
+task bowerInstall(type:Exec, description : 'copy js files dependencies that is defined in Bower.js') {
+
+    if(Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', 'bower', 'install'
+    } else {
+        commandLine 'bower', 'install'
+    }
+
+    def jsonHandler = new JsonSlurper()
+    def jsonFile = file("bower.json")
+    def conf = jsonHandler.parseText(jsonFile.getText("UTF-8"))
+    def pathMap = [:]
+
+    conf.install.path.each {
+        pathMap.put(it.key, it.value)
+    }
+
+    conf.install.sources.each {
+        it.value.each { f ->
+            def sourceFile = file(f)
+            String sourceName = sourceFile.name
+            int dotPos = sourceName.lastIndexOf(".")
+            String ext = sourceName.substring(dotPos + 1, sourceName.length())
+            if(pathMap.containsKey(ext)) {
+                copy {
+                    from f
+                    into pathMap.get(ext)
+                }
+            }
+        }
+    }
+}
+
+war {
+    dependsOn bowerInstall
 }
