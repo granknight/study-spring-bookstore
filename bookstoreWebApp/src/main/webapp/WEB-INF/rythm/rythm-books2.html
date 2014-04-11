@@ -1,0 +1,29 @@
+@args List<me.xyzlast.bh.entities.Book> books
+@message("label.welcome") <br/>
+
+<h3>Spring Model Data</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>책제목</td>
+      <td>빌린 사람</td>
+    </tr>
+    @for(me.xyzlast.bh.entities.Book book : books) {
+      <tr>
+        <td>@book.getName()</td>
+        <td>
+          @if(book.getRentUser() == null) {
+            빌린 사람이 없어요.
+          } else {
+            빌린 사람이 있어요.
+          }
+        </td>
+      </tr>
+    }
+  </thead>
+</table>
+
+<h3>angularJS controller data</h3>
+<ul ng-repeat="thing in awesomeThings">
+  <li>{{thing}}</li>
+</ul>

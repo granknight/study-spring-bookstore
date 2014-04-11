@@ -1,6 +1,7 @@
 apply plugin: 'war'
 apply plugin: 'tomcat'
 apply plugin: 'cargo'
+// apply plugin: 'bower-installer'
 
 // tomcat과 cargo plugin에 대한 repository 설정입니다.
 buildscript {
@@ -8,13 +9,15 @@ buildscript {
         mavenCentral()
         jcenter()
     }
-
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.0'
         classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.4'
     }
 }
 
+configurations {
+    all*.exclude group: 'org.hibernate.javax.persistence', module: 'hibernate-jpa-2.0-api'
+}
 
 dependencies {
     // tomcat plugin 설정입니다.
@@ -50,6 +53,8 @@ dependencies {
     compile 'org.freemarker:freemarker:2.3.20'
     compile 'com.ctlok:spring-webmvc-rythm:1.4.4'
     compile project(':bookstoreHibernate')
+
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
 }
 
 // tomcarRun을 실행시키기 위해서 war에 대한 dependency를 주입합니다.
@@ -88,41 +93,29 @@ cargo {
     }
 }
 
-import org.apache.tools.ant.taskdefs.condition.Os
-import groovy.json.JsonSlurper
-task bowerInstall(type:Exec, description : 'copy js files dependencies that is defined in Bower.js') {
 
-    if(Os.isFamily(Os.FAMILY_WINDOWS)) {
-        commandLine 'cmd', 'bower', 'install'
-    } else {
-        commandLine 'bower', 'install'
-    }
+task gruntRun {
+    String command = '. grunt serve'
+    String directory = 'src/main/yo'
+    String ready = 'Waiting...'
 
-    def jsonHandler = new JsonSlurper()
-    def jsonFile = file("bower.json")
-    def conf = jsonHandler.parseText(jsonFile.getText("UTF-8"))
-    def pathMap = [:]
+    doLast {
+        ProcessBuilder builder = new ProcessBuilder(command.split(' '))
+        builder.redirectErrorStream(true)
+        builder.directory(file(directory))
+        Process process = builder.start()
 
-    conf.install.path.each {
-        pathMap.put(it.key, it.value)
-    }
+        InputStream stdout = process.getInputStream()
+        BufferedReader reader = new BufferedReader(new
+                InputStreamReader(stdout))
 
-    conf.install.sources.each {
-        it.value.each { f ->
-            def sourceFile = file(f)
-            String sourceName = sourceFile.name
-            int dotPos = sourceName.lastIndexOf(".")
-            String ext = sourceName.substring(dotPos + 1, sourceName.length())
-            if(pathMap.containsKey(ext)) {
-                copy {
-                    from f
-                    into pathMap.get(ext)
-                }
+        def line
+        while ((line = reader.readLine()) != null) {
+            println line
+            if (line.contains(ready)) {
+                println "$command is ready"
+                break;
             }
         }
     }
-}
-
-war {
-    dependsOn bowerInstall
 }

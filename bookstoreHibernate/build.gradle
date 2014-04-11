@@ -1,58 +1,16 @@
+apply plugin : 'local-resource'
+apply plugin : 'querydsl'
+
+querydsl {
+    version = '3.3.2'
+}
+
 dependencies {
     def springVersion = "4.0.1.RELEASE"
-
-    compile 'org.hibernate:hibernate-core:4.3.1.Final'
-    compile 'org.hibernate:hibernate-entitymanager:4.3.1.Final'
     compile "org.springframework:spring-orm:${springVersion}"
+    compile 'org.springframework.data:spring-data-jpa:1.5.1.RELEASE'
 
-    def queryDSL = '3.2.4'
-    compile("com.mysema.querydsl:querydsl-core:$queryDSL")
-    compile("com.mysema.querydsl:querydsl-jpa:$queryDSL")
-    compile("com.mysema.querydsl:querydsl-sql:$queryDSL")
-    provided("com.mysema.querydsl:querydsl-apt:$queryDSL") {
-        exclude group: 'com.google.guava'
-    }
-    compile 'org.springframework.data:spring-data-jpa:1.5.0.RELEASE'
+    compile "org.hibernate:hibernate-core:4.3.4.Final"
+    compile 'org.hibernate:hibernate-entitymanager:4.3.4.Final'
 }
 
-sourceSets {
-    generated {
-        java {
-            srcDirs = ['src/main/generated']
-        }
-    }
-}
-
-// QEntity 생성 task
-task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
-    source = sourceSets.main.java
-    classpath = configurations.compile + configurations.provided
-    options.compilerArgs = [
-            "-proc:only",
-            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
-    ]
-    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
-}
-
-// compileJava task에 dependency를 걸어줍니다.
-compileJava {
-    dependsOn generateQueryDSL
-    // compile target에 generated된 QClass들의 위치를 추가.
-    source sourceSets.generated.java.srcDirs.iterator().next()
-}
-
-compileGeneratedJava {
-    dependsOn generateQueryDSL
-    options.warnings = false
-    classpath += sourceSets.main.runtimeClasspath
-}
-
-clean {
-    delete sourceSets.generated.java.srcDirs
-}
-
-idea {
-    module {
-        sourceDirs += file('src/main/generated')
-    }
-}

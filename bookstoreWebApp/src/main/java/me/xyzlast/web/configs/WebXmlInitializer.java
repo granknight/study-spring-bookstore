@@ -17,7 +17,7 @@ import javax.servlet.ServletContext;
 public class WebXmlInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {EmptyDomainConfiguration.class, JpaConfiguration.class};
+        return new Class<?>[] { EmptyDomainConfiguration.class, JpaConfiguration.class};
     }
 
     @Override

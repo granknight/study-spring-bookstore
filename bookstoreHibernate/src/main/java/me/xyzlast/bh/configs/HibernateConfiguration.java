@@ -55,11 +55,19 @@ public class HibernateConfiguration {
         properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
         properties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
 
+        // NOTE : Hibernate static analysis tool
+//        hibernate.generate_statistics————————– true
+//        hibernate.cache.use_structured_entrie————– true
+        properties.setProperty("hibernate.generate_statistics", Boolean.TRUE.toString());
+        properties.setProperty("hibernate.cache.use_structured_entire", Boolean.TRUE.toString());
+//        properties.setProperty("hibernate.cache.use_query_cache", "true");
+
         LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
         localSessionFactoryBean.setDataSource(dataSource());
         localSessionFactoryBean.setHibernateProperties(properties);
 
         localSessionFactoryBean.setPackagesToScan(new String[] { "me.xyzlast.bh.entities" });
+
         return localSessionFactoryBean;
     }
 

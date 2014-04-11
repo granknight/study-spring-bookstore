@@ -3,10 +3,15 @@ apply plugin: 'base'
 // spring prop plugin 추가
 buildscript {
     repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
         maven { url 'http://repo.springsource.org/plugins-release' }
+        maven { url "https://github.com/xyzlast/xyzlast-maven-repo/raw/master/releases" }
     }
     dependencies {
         classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.5'
+        classpath 'me.xyzlast:gradle-plugins:0.2.1-SNAPSHOT'
     }
 }
 
