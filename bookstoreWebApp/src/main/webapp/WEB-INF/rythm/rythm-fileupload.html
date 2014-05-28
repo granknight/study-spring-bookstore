@@ -1,0 +1,28 @@
+@extends("layout.html")
+@section("content") {
+<form id="uploadForm" enctype="multipart/form-data">
+  <input type="file" id="fileId" name="file-data"/>
+</form>
+<button id="btn-upload">file upload</button>
+<script>
+  $('#btn-upload').on('click', function () {
+    console.log('btn-upload');
+    var form = new FormData(document.getElementById('uploadForm'));
+    $.ajax({
+      url: "upload",
+      data: form,
+      dataType: 'text',
+      processData: false,
+      contentType: false,
+      type: 'POST',
+      success: function (response) {
+        console.log('success');
+        console.log(response);
+      },
+      error: function (jqXHR) {
+        console.log('error');
+      }
+    });
+  });
+</script>
+}

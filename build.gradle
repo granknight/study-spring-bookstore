@@ -7,13 +7,22 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url 'http://repo.springsource.org/plugins-release' }
-        maven { url "https://github.com/xyzlast/xyzlast-maven-repo/raw/master/releases" }
     }
     dependencies {
         classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.5'
-        classpath 'me.xyzlast:gradle-plugins:0.2.1-SNAPSHOT'
     }
 }
+
+ext {
+    javaVersion = 1.8
+
+    springVersion = "4.0.3.RELEASE"
+    springjpaVersion = "1.5.1.RELEASE"
+    querydslVersion = "3.3.2"
+    hibernateVersion = "4.3.4.Final"
+    springsecurityVersion = "3.2.3.RELEASE"
+}
+
 
 subprojects {
     // Plugin 설정, 만약에 code에 대한 static analysis가 필요한 경우에 이곳에 설정.
@@ -31,7 +40,6 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "http://192.168.13.209:8080/nexus/content/repositories/releases" }
     }
 
     dependencies {
@@ -64,5 +72,21 @@ subprojects {
 
     // source code encoding
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    if(project.hasProperty('target')) {
+        sourceSets {
+            main.resources.srcDirs = ['src/main/resources', "src/main/resources-${project.target}"]
+            test.resources.srcDirs = ['src/test/resources', "src/test/resources-${project.target}"]
+        }
+    } else {
+        String hostname = InetAddress.getLocalHost().getHostName().toLowerCase();
+        if(hostname.endsWith('.local')) {
+            hostname = hostname.replace(".local", '')
+        }
+        sourceSets {
+            main.resources.srcDirs = ['src/main/resources', "src/main/resources-" + hostname]
+            test.resources.srcDirs = ['src/test/resources', "src/test/resources-" + hostname]
+        }
+    }
 }
 

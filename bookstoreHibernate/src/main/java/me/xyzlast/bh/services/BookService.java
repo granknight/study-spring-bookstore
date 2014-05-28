@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface BookService {
     List<Book> listup();
+    void add(String name, String author, String description);
 }

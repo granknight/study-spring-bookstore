@@ -29,4 +29,9 @@ public class BookServiceImpl implements BookService {
     public List<Book> listup() {
         return bookDao.listByStatus();
     }
+
+    @Override
+    public void add(String name, String author, String description) {
+
+    }
 }

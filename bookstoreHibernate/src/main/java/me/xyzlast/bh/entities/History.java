@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by ykyoon on 2/21/14.
  */
 @Entity
-@Table(name = "histories", schema = "", catalog = "bookstore2")
+@Table(name = "histories", schema = "", catalog = "bookstore")
 public class History extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "userId")

@@ -10,7 +10,7 @@ import java.util.Collection;
  * Created by ykyoon on 2/21/14.
  */
 @Entity
-@Table(name = "users", schema = "", catalog = "bookstore2")
+@Table(name = "users", schema = "", catalog = "bookstore")
 public class User extends BaseEntity {
     @Basic
     @Column(name = "name")

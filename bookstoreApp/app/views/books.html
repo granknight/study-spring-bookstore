@@ -1,1 +1,25 @@
-<p>This is the books view.</p>
+<h2>책 리스트</h2>
+<p>책 갯수 : {{books.length}}</p>
+<div>
+  search : <input type="text" ng-model="query"/>
+</div>
+  query value : {{query}}
+<table class="table">
+  <thead>
+    <tr>
+      <td>책이름</td>
+      <td>저자</td>
+      <td>설명</td>
+    </tr>
+  </thead>
+
+  <tbody ng-repeat="book in books | bookNameFilter:query">
+    <tr>
+      <td>{{book.name}}</td>
+      <td>{{book.author}}</td>
+      <td>{{book.description}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!--bookNameFilter:-->

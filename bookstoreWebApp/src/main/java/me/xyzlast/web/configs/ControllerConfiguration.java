@@ -1,13 +1,16 @@
 package me.xyzlast.web.configs;
 
-import com.ctlok.springframework.web.servlet.view.rythm.RythmConfigurator;
-import com.ctlok.springframework.web.servlet.view.rythm.RythmViewResolver;
-import org.apache.velocity.app.VelocityEngine;
+//import com.ctlok.springframework.web.servlet.view.rythm.RythmConfigurator;
+//import com.ctlok.springframework.web.servlet.view.rythm.RythmViewResolver;
+//import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -115,24 +118,24 @@ public class ControllerConfiguration extends WebMvcConfigurerAdapter {
         return freeMarkerViewResolver;
     }
 
-    @Bean
-    public RythmConfigurator rythmConfigurator() {
-        RythmConfigurator rythmConfigurator = new RythmConfigurator();
-        rythmConfigurator.setMode("dev");
-        rythmConfigurator.setRootDirectory("/WEB-INF/");
-
-        return rythmConfigurator;
-    }
-
-    @Bean
-    public RythmViewResolver rythmViewResolver() {
-        RythmViewResolver rythmViewResolver = new RythmViewResolver(rythmConfigurator());
-        rythmViewResolver.setContentType("text/html;charset=UTF-8");
-        rythmViewResolver.setPrefix("/WEB-INF/rythm/");
-        rythmViewResolver.setSuffix(".html");
-        rythmViewResolver.setOrder(4);
-        return rythmViewResolver;
-    }
+//    @Bean
+//    public RythmConfigurator rythmConfigurator() {
+//        RythmConfigurator rythmConfigurator = new RythmConfigurator();
+//        rythmConfigurator.setMode("dev");
+//        rythmConfigurator.setRootDirectory("/WEB-INF/");
+//
+//        return rythmConfigurator;
+//    }
+//
+//    @Bean
+//    public RythmViewResolver rythmViewResolver() {
+//        RythmViewResolver rythmViewResolver = new RythmViewResolver(rythmConfigurator());
+//        rythmViewResolver.setContentType("text/html;charset=UTF-8");
+//        rythmViewResolver.setPrefix("/WEB-INF/rythm/");
+//        rythmViewResolver.setSuffix(".html");
+//        rythmViewResolver.setOrder(4);
+//        return rythmViewResolver;
+//    }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
@@ -159,5 +162,10 @@ public class ControllerConfiguration extends WebMvcConfigurerAdapter {
         messageSource.setBasename("classpath:messages");
         messageSource.setFallbackToSystemLocale(false);
         return messageSource;
+    }
+
+    @Bean(name = "multipartResolver")
+    public MultipartResolver multipartResolver() {
+        return new CommonsMultipartResolver();
     }
 }

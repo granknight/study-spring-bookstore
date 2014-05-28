@@ -30,6 +30,14 @@ public class BookServiceImplTest {
     private BookService bookService;
 
     @Test
+    public void addBooks() {
+        for(int i = 0 ; i < 100 ; i++)
+        {
+
+        }
+    }
+
+    @Test
     public void listup() {
         List<Book> books = bookService.listup();
         for(Book book : books) {

@@ -1,7 +1,6 @@
 apply plugin: 'war'
 apply plugin: 'tomcat'
 apply plugin: 'cargo'
-// apply plugin: 'bower-installer'
 
 // tomcat과 cargo plugin에 대한 repository 설정입니다.
 buildscript {
@@ -51,10 +50,12 @@ dependencies {
 
     compile 'org.apache.velocity:velocity:1.7'
     compile 'org.freemarker:freemarker:2.3.20'
-    compile 'com.ctlok:spring-webmvc-rythm:1.4.4'
+//    compile 'com.ctlok:spring-webmvc-rythm:1.4.4'
     compile project(':bookstoreHibernate')
 
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
+    compile 'commons-fileupload:commons-fileupload:1.3.1'
+
 }
 
 // tomcarRun을 실행시키기 위해서 war에 대한 dependency를 주입합니다.
